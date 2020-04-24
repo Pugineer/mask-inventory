@@ -1,6 +1,6 @@
 # djangogirls/.gitignore
 
-mask-inventory_venv
+venv/
 *.pyc
 __pycache__
 staticfiles
