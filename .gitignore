@@ -1,0 +1,7 @@
+# djangogirls/.gitignore
+
+mask-inventory_venv
+*.pyc
+__pycache__
+staticfiles
+db.sqlite3
