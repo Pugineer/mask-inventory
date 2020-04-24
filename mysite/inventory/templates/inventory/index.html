@@ -1,7 +1,6 @@
-{% if products %}
+<h1>{{ question.question_text }}</h1>
 <ul>
-    {% for product in products %}
-    <li>products[product].text</li>
+    {% for choice in question.choice_set.all %}
+    <li>{{ choice.choice_text }}</li>
     {% endfor %}
 </ul>
-{% endif %}

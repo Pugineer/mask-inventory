@@ -5,8 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
-def crawl(productsList):
+def crawl():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
 
@@ -31,5 +30,4 @@ def crawl(productsList):
     for p in range(len(products)):
         productList.append(products[p].text)
 
-    return productsList
-
+    return productList
