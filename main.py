@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
 def crawl():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
@@ -13,10 +14,10 @@ def crawl():
     options.binary_location = GOOGLE_CHROME_PATH
     options.add_argument("--headless")
     options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
-    options.add_argument("--disable-dev-shm-usage")
+    # options.add_argument('--no-sandbox')
+    # options.add_argument("--disable-dev-shm-usage")
     try:
-        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
+        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
         print("run")
     except:
         driver = webdriver.Chrome()

@@ -1,6 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+
 # Create your views here.
+from main import crawl
+
 
 def index(request):
-    return render(request, 'inventory/index.html')
+    context = {
+        "crawlResult": crawl()
+    }
+    return render(request, 'inventory/index.html', context)
