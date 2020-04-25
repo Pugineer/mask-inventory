@@ -1,8 +1,6 @@
+
 from django.shortcuts import render
-
-# Create your views here.
-from main import crawl
-
+from .main import crawl
 
 def index(request):
     context = {
