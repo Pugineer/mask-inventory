@@ -35,10 +35,8 @@ def crawlHKTV():
     terminate = False
     # Crawling HKTVMall
     pageNumber = 0
+    jsonDict = []
     while not terminate:
-        productList = []
-        priceList = []
-        urlList = []
         pageNumber += 1
         try:
             element = WebDriverWait(driver, 5).until(
@@ -50,10 +48,11 @@ def crawlHKTV():
         productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
 
         for p in range(len(productWrapper)):
-            productList.append(productWrapper[p].find_element_by_class_name("brand-product-name").text)
-            priceList.append(productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute("data-price"))
-            urlList.append(productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
-
+            product = productWrapper[p].find_element_by_class_name("brand-product-name").text
+            price = (productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute(
+                "data-price"))
+            url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
+            jsonDict.append({"Title": product, "Price": price, "URL": url})
 
         btn = driver.find_element_by_id("paginationMenu_nextBtn")
         if not btn.get_attribute("class") == "disabled":
@@ -68,12 +67,14 @@ def crawlHKTV():
             print("Done.")
             print("Crawling completed.")
 
+    with open(os.getcwd() + '/hktv.json', 'w', encoding="utf-8") as outfile:
+        json.dump(jsonDict, outfile, ensure_ascii=False)
+
     print(datetime.now() - start)
     # Creating JSON file
-    with open(os.getcwd() + '/hktv.json', 'w', encoding="utf-8") as outfile:
-        hktvDict = {"Title": productList, "Price": priceList, "URL": urlList}
-        json.dump(hktvDict, outfile, ensure_ascii=False)
+
 
     return 0
+
 
 crawlHKTV()
