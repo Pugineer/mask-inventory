@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath crawl crawl.wsgi
+web: gunicorn --pythonpath crawl crawl.wsgi --timeout 120
