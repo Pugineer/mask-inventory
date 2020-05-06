@@ -7,4 +7,4 @@ from hktv import crawlHKTV
 
 
 def index(request):
-    return HttpResponse("Please wait")
+    return HttpResponse("Hello world")
