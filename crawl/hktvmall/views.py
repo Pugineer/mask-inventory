@@ -6,7 +6,8 @@ from hktv import crawlHKTV
 
 
 def index(request):
-    crawlHKTV()
-    filepath = os.getcwd()
-    filepath += "/hktv.json"
+    filepath = os.getcwd() + "/hktv.json"
+    if not os.path.isfile(filepath):
+        crawlHKTV()
+
     return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
