@@ -62,7 +62,7 @@ def crawlHKTV():
 
     print(datetime.now() - start)
     # Creating JSON file
-    with open(os.getcwd() + '/crawl/hktv.json', 'w', encoding="utf-8") as outfile:
+    with open(os.getcwd() + '/hktv.json', 'w', encoding="utf-8") as outfile:
         hktvDict = {"Title": productList, "Price": priceList}
         json.dump(hktvDict, outfile, ensure_ascii=False)
 
