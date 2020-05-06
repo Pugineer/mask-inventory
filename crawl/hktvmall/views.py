@@ -15,6 +15,6 @@ def index(request):
 def result(request):
     filepath = os.getcwd() + "/hktv.json"
     if not os.path.isfile(filepath):
-        q.enqueue(crawlHKTV)
+        q.enqueue(crawlHKTV())
     return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
 
