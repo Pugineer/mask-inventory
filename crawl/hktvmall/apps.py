@@ -7,6 +7,3 @@ import os
 
 class HktvmallConfig(AppConfig):
     name = 'hktvmall'
-    def ready(self):
-        crawlHKTV()
-        pass

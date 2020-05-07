@@ -15,7 +15,6 @@ def timed_job():
     print('This job is run every three minutes.')
     crawlHKTV()
 
-
 sched.start()
 
 def index(request):
