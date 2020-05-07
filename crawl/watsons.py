@@ -14,7 +14,7 @@ from fake_useragent import UserAgent
 import time
 
 
-def crawlWastons():
+def crawlWatsons():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
     #ua = UserAgent(verify_ssl=False)
@@ -52,7 +52,7 @@ def crawlWastons():
             btn = driver.find_element_by_link_text("顯示更多")
             actions = ActionChains(driver)
             actions.click(btn).perform()
-            time.sleep(2)
+            time.sleep(3)
 
         productWrapper = driver.find_elements_by_class_name("productItemContainer")
         print(len(productWrapper))
@@ -71,7 +71,7 @@ def crawlWastons():
         terminate = True
         print("Crawling completed.")
 
-    with open(os.getcwd() + '/crawl/maskInventory/templates/maskInventory/wastons.json', 'w', encoding="utf-8") as outfile:
+    with open(os.getcwd() + '/crawl/maskInventory/templates/maskInventory/watsons.json', 'w', encoding="utf-8") as outfile:
         json.dump(jsonDict, outfile, ensure_ascii=False)
 
     print(datetime.now() - start)
