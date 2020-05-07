@@ -9,14 +9,6 @@ from datetime import datetime
 
 filepath = os.getcwd() + "/hktv.json"
 
-sched = BackgroundScheduler()
-@sched.scheduled_job('interval', minutes=3)
-def timed_job():
-    print('This job is run every three minutes.')
-    crawlHKTV()
-
-sched.start()
-
 def index(request):
     if not os.path.isfile(filepath):
         return HttpResponse("Crawling")
