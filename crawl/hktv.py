@@ -68,7 +68,7 @@ def crawlHKTV():
             print("Done.")
             print("Crawling completed.")
 
-    with open(os.getcwd() + '/templates/hktvmall/hktv.json', 'w', encoding="utf-8") as outfile:
+    with open(os.getcwd() + '/hktvmall/templates/hktvmall/hktv.json', 'w', encoding="utf-8") as outfile:
         json.dump(jsonDict, outfile, ensure_ascii=False)
 
     print(datetime.now() - start)
