@@ -15,9 +15,9 @@ from fake_useragent import UserAgent
 def crawlHKTV():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-    # ua = UserAgent(verify_ssl=False)
-    # user_agent = ua.chrome
-    # print("Booting with: " + user_agent)
+    ua = UserAgent(verify_ssl=False)
+    user_agent = ua.chrome
+    print("Booting with: " + user_agent)
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
     options.add_argument(f'user-agent={user_agent}')
