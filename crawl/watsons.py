@@ -43,9 +43,11 @@ def crawlWatsons():
     # Crawling watson
     jsonDict = []
     while not terminate:
-        element = WebDriverWait(driver, 30).until(
+        try:
+            element = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located((By.CLASS_NAME, "productItemContainer")))
-
+        except:
+            continue
         while len(driver.find_elements_by_link_text("顯示更多")) != 0:
             driver.execute_script("window.scrollBy(0,document.body.scrollHeight - 100)")
             time.sleep(1)
