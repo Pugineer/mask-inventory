@@ -23,7 +23,7 @@ def crawlWatsons():
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
     #options.add_argument(f'user-agent={user_agent}')
-    #options.add_argument("--headless")
+    # boptions.add_argument("--headless")
     # options.add_argument('--disable-gpu')
     # options.add_argument('--no-sandbox')
     # options.add_argument("--disable-dev-shm-usage")
@@ -46,7 +46,7 @@ def crawlWatsons():
             EC.presence_of_element_located((By.CLASS_NAME, "productItemContainer")))
 
         while len(driver.find_elements_by_link_text("顯示更多")) != 0:
-            driver.execute_script("window.scrollBy(0,document.body.scrollHeight)")
+            driver.execute_script("window.scrollBy(0,document.body.scrollHeight - 100)")
             time.sleep(1)
             btn = driver.find_element_by_link_text("顯示更多")
             actions = ActionChains(driver)
