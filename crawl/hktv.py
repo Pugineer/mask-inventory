@@ -48,6 +48,7 @@ def crawlHKTV():
             )
         except:
             print("Element locate failure")
+            break
 
         print("Crawling on page " + str(pageNumber) + "...", end="   ")
         productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
