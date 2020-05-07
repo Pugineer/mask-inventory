@@ -10,7 +10,7 @@ from datetime import datetime
 filepath = os.getcwd() + "/hktv.json"
 
 sched = BackgroundScheduler()
-@sched.scheduled_job('interval', minutes=3)
+@sched.scheduled_job('interval', minutes=3, next_run_time=datetime.now())
 def timed_job():
     print('This job is run every three minutes.')
     crawlHKTV()
