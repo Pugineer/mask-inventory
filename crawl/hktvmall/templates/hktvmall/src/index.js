@@ -1,4 +1,4 @@
-$.getJSON("data.json", function (data) {
+$.getJSON("hktv.json", function (data) {
   var items = [];
   var itemsKey = "";
   var prices = [];
