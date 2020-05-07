@@ -15,8 +15,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from apscheduler.schedulers.background import BackgroundScheduler
+from hktv import crawlHKTV
+from datetime import datetime
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('hktvmall.urls'))
 ]
+
+
+sched = BackgroundScheduler()
+@sched.scheduled_job('interval', minutes=3, next_run_time=datetime.now())
+def timed_job():
+    print('This job is run every three minutes.')
+    try:
+        crawlHKTV()
+    except:
+        print("Error occured")
+
+
+sched.start()
