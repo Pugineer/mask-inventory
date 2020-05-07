@@ -1,3 +1,4 @@
+apscheduler
 rq
 redis
 asgiref==3.2.7

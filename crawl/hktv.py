@@ -9,15 +9,19 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from fake_useragent import UserAgent
 
 
 def crawlHKTV():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-
+    ua = UserAgent(verify_ssl=False)
+    user_agent = ua.random
+    print("Botting with: " + user_agent)
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
-    options.add_argument("--headless")
+    options.add_argument(f'user-agent={user_agent}')
+    # options.add_argument("--headless")
     # options.add_argument('--disable-gpu')
     # options.add_argument('--no-sandbox')
     # options.add_argument("--disable-dev-shm-usage")
@@ -73,8 +77,7 @@ def crawlHKTV():
     print(datetime.now() - start)
     # Creating JSON file
 
-
+    driver.close()
     return 0
-
 
 crawlHKTV()
