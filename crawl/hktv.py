@@ -79,5 +79,3 @@ def crawlHKTV():
 
     driver.close()
     return 0
-
-crawlHKTV()
