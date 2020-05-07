@@ -43,11 +43,12 @@ def crawlHKTV():
     while not terminate:
         pageNumber += 1
         try:
-            element = WebDriverWait(driver, 5).until(
+            element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "brand-product-name"))
             )
         except:
-            continue
+            print("Element locate failure")
+
         print("Crawling on page " + str(pageNumber) + "...", end="   ")
         productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
 
