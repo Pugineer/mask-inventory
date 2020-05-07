@@ -39,7 +39,7 @@ def crawlWatsons():
     driver.get("https://www.watsons.com.hk/search?text=%E5%8F%A3%E7%BD%A9")
 
     terminate = False
-    # Crawling waston
+    # Crawling watson
     pageNumber = 0
     jsonDict = []
     while not terminate:
