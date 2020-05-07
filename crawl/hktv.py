@@ -45,33 +45,32 @@ def crawlHKTV():
         try:
             element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "brand-product-name"))
-            )
+
+            print("Crawling on page " + str(pageNumber) + "...", end="   ")
+            productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
+
+            for p in range(len(productWrapper)):
+                product = productWrapper[p].find_element_by_class_name("brand-product-name").text
+                price = (productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute(
+                    "data-price"))
+                url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
+                jsonDict.append({"Title": product, "Price": price, "URL": url})
+
+            btn = driver.find_element_by_id("paginationMenu_nextBtn")
+            if not btn.get_attribute("class") == "disabled":
+
+                action = ActionChains(driver)
+                action.move_to_element(btn).perform()
+                driver.execute_script("window.scrollBy(0,100)")
+                action.click().perform()
+                print("Done.")
+            else:
+                terminate = True
+                print("Done.")
+                print("Crawling completed.")
         except:
-            print("Element locate failure")
+            print("Craling failure. Program terminated.")
             break
-
-        print("Crawling on page " + str(pageNumber) + "...", end="   ")
-        productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
-
-        for p in range(len(productWrapper)):
-            product = productWrapper[p].find_element_by_class_name("brand-product-name").text
-            price = (productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute(
-                "data-price"))
-            url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
-            jsonDict.append({"Title": product, "Price": price, "URL": url})
-
-        btn = driver.find_element_by_id("paginationMenu_nextBtn")
-        if not btn.get_attribute("class") == "disabled":
-
-            action = ActionChains(driver)
-            action.move_to_element(btn).perform()
-            driver.execute_script("window.scrollBy(0,100)")
-            action.click().perform()
-            print("Done.")
-        else:
-            terminate = True
-            print("Done.")
-            print("Crawling completed.")
 
     with open(os.getcwd() + '/hktv.json', 'w', encoding="utf-8") as outfile:
         json.dump(jsonDict, outfile, ensure_ascii=False)
