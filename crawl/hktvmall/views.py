@@ -4,8 +4,6 @@ import os
 from django.http import HttpResponse
 from django.views.static import serve
 from apscheduler.schedulers.background import BackgroundScheduler
-from rq import Queue
-from worker import conn
 from hktv import crawlHKTV
 from datetime import datetime
 
