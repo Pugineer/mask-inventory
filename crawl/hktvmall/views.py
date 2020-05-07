@@ -5,8 +5,6 @@ from django.views.static import serve
 from django.http import JsonResponse
 import json
 import os
-with open(os.getcwd() + '/hktvmall/templates/hktvmall/hktv.json') as json_data:
-    d = json.load(json_data)
 
 
 
@@ -14,4 +12,6 @@ def index(request):
     return render(request, 'hktvmall/index.html')
 
 def hktv(request):
+    with open(os.getcwd() + '/hktvmall/templates/hktvmall/hktv.json', encoding="utf-8") as json_data:
+        d = json.load(json_data)
     return JsonResponse(d, safe=False)
