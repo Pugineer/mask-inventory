@@ -22,7 +22,7 @@ def crawlWatsons():
     #print("Booting with: " + user_agent)
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
-    options.add_experimental_option('prefs', {'intl.accept_languages': 'zh-TW','zh'})
+    options.add_experimental_option('prefs', {'intl.accept_languages': 'zh-TW'})
     #options.add_argument(f'user-agent={user_agent}')
     # boptions.add_argument("--headless")
     # options.add_argument('--disable-gpu')
