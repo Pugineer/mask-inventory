@@ -21,7 +21,7 @@ def crawlHKTV():
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
     options.add_argument(f'user-agent={user_agent}')
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     # options.add_argument('--disable-gpu')
     # options.add_argument('--no-sandbox')
     # options.add_argument("--disable-dev-shm-usage")
