@@ -5,7 +5,6 @@ venv/
 __pycache__
 staticfiles
 db.sqlite3
-.idea/workspace.xml
-.idea/mask-inventory.iml
-crawl/hktvmall/templates/hktvmall/hktv.json
-crawl/hktvmall/templates/hktvmall/hktv.json
+.idea/
+crawl/maskInventory/templates/maskInventory/hktv.json
+crawl/maskInventory/templates/maskInventory/wastons.json

@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hktvmall.apps.HktvmallConfig',
+    'maskInventory.apps.maskInventoryConfig',
 ]
 
 MIDDLEWARE = [

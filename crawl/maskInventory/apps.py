@@ -1,11 +1,12 @@
 from django.apps import AppConfig
 from apscheduler.schedulers.background import BackgroundScheduler
 from hktv import crawlHKTV
+from wastons import crawlWastons
 from datetime import datetime
 
 
-class HktvmallConfig(AppConfig):
-    name = 'hktvmall'
+class maskInventoryConfig(AppConfig):
+    name = 'maskInventory'
 
     def ready(self):
         sched = BackgroundScheduler()
@@ -13,6 +14,6 @@ class HktvmallConfig(AppConfig):
         @sched.scheduled_job('interval', minutes=30, next_run_time=datetime.now())
         def timed_job():
             print('This job is run every three minutes.')
-            crawlHKTV()
+            crawlWastons()
 
         sched.start()
