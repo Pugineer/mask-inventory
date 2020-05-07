@@ -7,5 +7,5 @@ staticfiles
 db.sqlite3
 .idea/workspace.xml
 .idea/mask-inventory.iml
-hktv.json
-crawl/hktv.json
+crawl/hktvmall/templates/hktvmall/hktv.json
+crawl/hktvmall/templates/hktvmall/hktv.json

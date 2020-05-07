@@ -15,9 +15,9 @@ from fake_useragent import UserAgent
 def crawlHKTV():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-    #ua = UserAgent(verify_ssl=False)
-    #user_agent = ua.chrome
-    #print("Booting with: " + user_agent)
+    # ua = UserAgent(verify_ssl=False)
+    # user_agent = ua.chrome
+    # print("Booting with: " + user_agent)
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
     # options.add_argument(f'user-agent={user_agent}')
@@ -42,41 +42,36 @@ def crawlHKTV():
     jsonDict = []
     while not terminate:
         pageNumber += 1
-        try:
-            element = WebDriverWait(driver, 30).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "brand-product-name")))
+        element = WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "brand-product-name")))
 
-            print("Crawling on page " + str(pageNumber) + "...", end="   ")
-            productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
+        print("Crawling on page " + str(pageNumber) + "...", end="   ")
+        productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
 
-            for p in range(len(productWrapper)):
-                product = productWrapper[p].find_element_by_class_name("brand-product-name").text
-                price = (productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute(
-                    "data-price"))
-                url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
-                jsonDict.append({"Title": product, "Price": price, "URL": url})
+        for p in range(len(productWrapper)):
+            product = productWrapper[p].find_element_by_class_name("brand-product-name").text
+            price = (productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute(
+                "data-price"))
+            url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
+            jsonDict.append({"Title": product, "Price": price, "URL": url})
 
-            btn = driver.find_element_by_id("paginationMenu_nextBtn")
-            if not btn.get_attribute("class") == "disabled":
+        btn = driver.find_element_by_id("paginationMenu_nextBtn")
+        if not btn.get_attribute("class") == "disabled":
 
-                action = ActionChains(driver)
-                action.move_to_element(btn).perform()
-                driver.execute_script("window.scrollBy(0,100)")
-                action.click().perform()
-                print("Done.")
-            else:
-                terminate = True
-                print("Done.")
-                print("Crawling completed.")
-        except:
-            print("Crawling failure. Program terminated. " + str(pageNumber))
-            break
+            action = ActionChains(driver)
+            action.move_to_element(btn).perform()
+            driver.execute_script("window.scrollBy(0,100)")
+            action.click().perform()
+            print("Done.")
+        else:
+            terminate = True
+            print("Done.")
+            print("Crawling completed.")
 
-    with open(os.getcwd() + '/hktv.json', 'w', encoding="utf-8") as outfile:
+    with open(os.getcwd() + "templates/hktvmall/hktv.json", 'w', encoding="utf-8") as outfile:
         json.dump(jsonDict, outfile, ensure_ascii=False)
 
     print(datetime.now() - start)
     # Creating JSON file
-
     driver.close()
     return 0
