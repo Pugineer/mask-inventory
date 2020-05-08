@@ -25,7 +25,7 @@ def crawlWatsons():
     options.add_argument("--lang=zh-TW");
     #options.add_argument(f'user-agent={user_agent}')
     options.add_argument("--headless")
-
+    options.add_argument("--disable-plugins")
     # Image disable
     options.add_argument('blink-settings=imagesEnabled=false')
 
@@ -64,7 +64,7 @@ def crawlWatsons():
         productWrapper = driver.find_elements_by_class_name("productItemContainer")
         print(len(productWrapper))
         for p in range(len(productWrapper)):
-            disable = (len(productWrapper[p].find_elements_by_link_text("售罄")) != 0)
+            disable = (len(productWrapper[p].find_elements_by_link_text("售罄")) != 0) or (len(productWrapper[p].find_elements_by_link_text("Out of stock")) != 0)
             if not disable:
                 product = productWrapper[p].find_element_by_class_name("h1").text
                 print(product)
