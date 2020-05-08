@@ -25,7 +25,12 @@ def crawlWatsons():
     options.add_argument("--lang=zh-TW");
     #options.add_argument(f'user-agent={user_agent}')
     options.add_argument("--headless")
-    # options.add_argument('--disable-gpu')
+
+    # Image disable
+    options.add_argument('blink-settings=imagesEnabled=false')
+
+    # Bug avoid
+    options.add_argument('--disable-gpu')
     # options.add_argument('--no-sandbox')
     # options.add_argument("--disable-dev-shm-usage")
     start = datetime.now()
