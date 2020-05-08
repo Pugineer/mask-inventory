@@ -110,7 +110,6 @@ USE_I18N = True
 
 LANGUAGE_CODE = 'zh-hant'
 LANGUAGES = (
-    ('en_US', _('English')),
     ('zh-hans', _('Simplified Chinese')),
     ('zh-hant', _('Traditional Chinese')),
 )
