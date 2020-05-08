@@ -16,7 +16,7 @@ def hktv(request):
         d = json.load(json_data)
     return JsonResponse(d, safe=False)
 
-def wastons(request):
+def watsons(request):
     with open(os.getcwd() + '/crawl/maskInventory/templates/maskInventory/watsons.json', encoding="utf-8") as json_data:
         d = json.load(json_data)
     return JsonResponse(d, safe=False)
