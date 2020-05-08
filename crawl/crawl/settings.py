@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+from django.utils.translation import ugettext_lazy as _
 import os
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hktvmall.apps.HktvmallConfig',
+    'maskInventory.apps.maskInventoryConfig',
 ]
 
 MIDDLEWARE = [
@@ -63,10 +63,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n'
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'crawl.wsgi.application'
 
@@ -104,11 +106,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'Asia/Taipei'
-
 USE_I18N = True
+
+LANGUAGE_CODE = 'zh-hant'
+LANGUAGES = (
+    ('zh-hans', _('Simplified Chinese')),
+    ('zh-hant', _('Traditional Chinese')),
+)
+TIME_ZONE = 'Asia/Hong_Kong'
 
 USE_L10N = True
 
