@@ -21,7 +21,7 @@ def crawlHKTV():
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
     options.add_argument("--lang=zh-TW");
-    #options.add_argument(f'user-agent={user_agent}')
+    # options.add_argument(f'user-agent={user_agent}')
     options.add_argument("--headless")
     # options.add_argument("--disable-plugins")
     # Image disable
@@ -46,6 +46,7 @@ def crawlHKTV():
     # Crawling HKTVMall
     pageNumber = 0
     jsonDict = []
+    filterList = ["盒", "墊", "袋", "套", "夾", "液", "收納", "神器", "劑", "鏡", "寶", "機", "帽", "霧", "掛頸", "啫喱", "肌", "貼"]
     while not terminate:
         pageNumber += 1
         element = WebDriverWait(driver, 30).until(
@@ -56,10 +57,11 @@ def crawlHKTV():
 
         for p in range(len(productWrapper)):
             product = productWrapper[p].find_element_by_class_name("brand-product-name").text
-            price = (productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute(
-                "data-price"))
-            url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
-            jsonDict.append({"Title": product, "Price": price, "URL": url})
+            if not any(word in product for word in filterList):
+                price = (productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute(
+                    "data-price"))
+                url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
+                jsonDict.append({"Title": product, "Price": price, "URL": url})
 
         btn = driver.find_element_by_id("paginationMenu_nextBtn")
         if not btn.get_attribute("class") == "disabled":
