@@ -45,7 +45,7 @@
             });
         });
 
-        var inputData = "hktv"
+        var inputData = "watsons"
 
         function changeInput(str) {
             inputData = str
