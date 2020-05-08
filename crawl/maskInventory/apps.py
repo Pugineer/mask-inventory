@@ -11,9 +11,15 @@ class maskInventoryConfig(AppConfig):
     def ready(self):
         sched = BackgroundScheduler()
 
-        @sched.scheduled_job('interval', minutes=30, next_run_time=datetime.now())
-        def timed_job():
+        def HKTV():
+            print('This job is run every three minutes.')
+            crawlHKTV()
+
+        def Watsons():
             print('This job is run every three minutes.')
             crawlWatsons()
+
+        sched.add_job(HKTV, 'interval', minutes=30, next_run_time=datetime.now())
+        sched.add_job(Watsons(), 'interval', minutes=30, next_run_time=datetime.now())
 
         sched.start()
