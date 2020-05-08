@@ -19,7 +19,5 @@ class maskInventoryConfig(AppConfig):
             print('This job is run every three minutes.')
             crawlWatsons()
 
-        sched.add_job(HKTV, 'interval', minutes=30, next_run_time=datetime.now())
-        sched.add_job(Watsons(), 'interval', minutes=30, next_run_time=datetime.now())
 
         sched.start()
