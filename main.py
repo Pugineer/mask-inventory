@@ -10,3 +10,4 @@ def schedule():
 
 sched = BlockingScheduler()
 sched.add_job(schedule(), 'interval', hours=1, next_run_time=datetime.datetime.now())
+sched.start()
