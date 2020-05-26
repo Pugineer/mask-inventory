@@ -2,6 +2,7 @@ import json
 import logging
 import os
 from datetime import datetime
+from S3Upload import upload_file
 
 import boto3 as boto3
 from botocore.exceptions import ClientError
@@ -79,13 +80,11 @@ def crawlHKTV():
             print("Done.")
             print("Crawling completed.")
 
-    with open(os.getcwd() + '/json/HKTVMall.json', 'w', encoding="utf-8") as outfile:
+    with open(os.getcwd() + '/HKTVMall.json', 'w', encoding="utf-8") as outfile:
         json.dump(jsonDict, outfile, ensure_ascii=False)
 
     print(datetime.now() - start)
     # Creating JSON file
-
-    # Upload file to S3
-    upload_file(os.getcwd() + '/json/HKTVMall.json', "mask-inventory/HKTVMall.json")
+    upload_file(os.getcwd() + '/HKTVMall.json', "mask-inventory/HKTVMall.json")
     driver.close()
     return 0
