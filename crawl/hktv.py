@@ -1,7 +1,10 @@
 import json
+import logging
 import os
 from datetime import datetime
 
+import boto3 as boto3
+from botocore.exceptions import ClientError
 from django.http import HttpResponse
 from selenium import webdriver
 from selenium.webdriver import ActionChains, TouchActions
@@ -10,6 +13,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
+from urllib3 import request
 
 
 def crawlHKTV():
@@ -76,10 +80,13 @@ def crawlHKTV():
             print("Done.")
             print("Crawling completed.")
 
-    with open(os.getcwd() + '/crawl/maskInventory/templates/maskInventory/hktv.json', 'w', encoding="utf-8") as outfile:
+    with open(os.getcwd() + '/json/HKTVMall.json', 'w', encoding="utf-8") as outfile:
         json.dump(jsonDict, outfile, ensure_ascii=False)
 
     print(datetime.now() - start)
     # Creating JSON file
+
+    # Upload file to S3
+    upload_file(os.getcwd() + '/json/HKTVMall.json', "mask-inventory/HKTVMall.json")
     driver.close()
     return 0
