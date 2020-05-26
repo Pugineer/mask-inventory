@@ -19,17 +19,16 @@ import time
 def crawlWatsons():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-    # ua = UserAgent(verify_ssl=False)
-    # user_agent = ua.chrome
+    ua = UserAgent(verify_ssl=False)
+    user_agent = ua.chrome
     # print("Booting with: " + user_agent)
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
-    # options.add_argument(f'user-agent={user_agent}')
+    options.add_argument(f'user-agent={user_agent}')
     options.add_argument("--headless")
-    # options.add_argument("--disable-
-
+    options.add_argument("--disable-plugins")
     # Image disable
-    # options.add_argument('blink-settings=imagesEnabled=false')
+    options.add_argument('blink-settings=imagesEnabled=false')
 
     # Bug avoid
     # options.add_argument('--disable-gpu')
@@ -87,6 +86,6 @@ def crawlWatsons():
     print(datetime.now() - start)
     # Creating JSON file
     upload_file(os.getcwd() + '/watsons.json', "mask-inventory/watsons.json")
-    driver.close()
+    driver.quit()
 
     return 0
