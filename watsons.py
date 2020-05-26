@@ -88,7 +88,7 @@ def crawlWatsons():
 
     print(datetime.now() - start)
     # Creating JSON file
-
+    upload_file(os.getcwd() + '/json/watsons.json', "mask-inventory/watsons.json")
     driver.close()
 
     return 0
