@@ -11,8 +11,10 @@ def upload_file(file_name, object_name=None):
     # If S3 object_name was not specified, use file_name
     if object_name is None:
         object_name = file_name
-
-    bucket = os.environ.get('S3_BUCKET')
+    if os.environ.get('S3_BUCKET') == None:
+        bucket = "peachrara"
+    else:
+        bucket = os.environ.get('S3_BUCKET')
     # Upload the file
     s3_client = boto3.client('s3')
 
