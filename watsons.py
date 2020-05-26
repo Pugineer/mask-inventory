@@ -81,12 +81,12 @@ def crawlWatsons():
         terminate = True
         print("Crawling completed.")
 
-    with open(os.getcwd() + '/json/watsons.json', 'w', encoding="utf-8") as outfile:
+    with open(os.getcwd() + '/mask-Inventory/json/watsons.json', 'w', encoding="utf-8") as outfile:
         json.dump(jsonDict, outfile, ensure_ascii=False)
 
     print(datetime.now() - start)
     # Creating JSON file
-    upload_file(os.getcwd() + '/json/watsons.json', "mask-inventory/watsons.json")
+    upload_file(os.getcwd() + '/mask-Inventory/json/watsons.json', "mask-inventory/watsons.json")
 
     driver.close()
 
