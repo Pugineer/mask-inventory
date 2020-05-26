@@ -3,6 +3,7 @@ boto==2.49.0
 boto3==1.13.16
 botocore==1.16.16
 docutils==0.15.2
+fake-useragent==0.1.11
 jmespath==0.10.0
 python-dateutil==2.8.1
 pytz==2020.1
