@@ -9,4 +9,4 @@ def schedule():
     crawlHKTV()
 
 sched = BlockingScheduler()
-sched.add_job(schedule(), 'interval', hours=1, next_run_time=datetime.now())
+sched.add_job(schedule(), 'interval', hours=1, next_run_time=datetime.datetime.now())
