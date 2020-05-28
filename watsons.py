@@ -17,6 +17,7 @@ from fake_useragent import UserAgent
 import time
 
 def crawlWatsons():
+
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
     ua = UserAgent(verify_ssl=False)
@@ -25,15 +26,16 @@ def crawlWatsons():
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
     options.add_argument(f'user-agent={user_agent}')
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     options.add_argument("--disable-plugins")
     # Image disable
-    # options.add_argument('blink-settings=imagesEnabled=false')
+    options.add_argument('blink-settings=imagesEnabled=false')
 
     # Bug avoid
     # options.add_argument('--disable-gpu')
     # options.add_argument('--no-sandbox')
     # options.add_argument("--disable-dev-shm-usage")
+    error = False
     start = datetime.now()
     try:
         driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
@@ -50,7 +52,7 @@ def crawlWatsons():
     jsonDict = []
     while not terminate:
         try:
-            element = WebDriverWait(driver, 30).until(
+            element = WebDriverWait(driver, 60).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "productItemContainer")))
         except:
             print("Watsons no respond.")
@@ -63,6 +65,7 @@ def crawlWatsons():
             actions = ActionChains(driver)
             actions.click(btn).perform()
             time.sleep(3)
+            print("Scrolling")
 
         productWrapper = driver.find_elements_by_class_name("productItemContainer")
         print(len(productWrapper))

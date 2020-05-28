@@ -36,6 +36,7 @@ def crawlHKTV():
     # options.add_argument('--no-sandbox')
     # options.add_argument("--disable-dev-shm-usage")
     start = datetime.now()
+    error = False
     try:
         driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
         print("run")
@@ -53,8 +54,12 @@ def crawlHKTV():
     filterList = ["盒", "墊", "袋", "套", "夾", "液", "收納", "神器", "劑", "鏡", "寶", "機", "帽", "霧", "掛頸", "啫喱", "肌", "貼"]
     while not terminate:
         pageNumber += 1
-        element = WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "brand-product-name")))
+        try:
+            element = WebDriverWait(driver, 30).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "brand-product-name")))
+        except:
+            print("HKTVMall no response")
+            error = True
 
         print("Crawling on page " + str(pageNumber) + "...", end="   ")
         productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
@@ -80,12 +85,13 @@ def crawlHKTV():
             print("Done.")
             print("Crawling completed.")
 
-    with open(os.getcwd() + '/HKTVMall.json', 'w', encoding="utf-8") as outfile:
-        json.dump(jsonDict, outfile, ensure_ascii=False)
+    if not error:
+        with open(os.getcwd() + '/HKTVMall.json', 'w', encoding="utf-8") as outfile:
+            json.dump(jsonDict, outfile, ensure_ascii=False)
 
-    print(datetime.now() - start)
-    # Creating JSON file
-    upload_file(os.getcwd() + '/HKTVMall.json', "mask-inventory/HKTVMall.json")
+        print(datetime.now() - start)
+        # Creating JSON file
+        upload_file(os.getcwd() + '/HKTVMall.json', "mask-inventory/HKTVMall.json")
     driver.quit()
     return 0
 
