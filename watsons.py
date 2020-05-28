@@ -25,10 +25,10 @@ def crawlWatsons():
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
     options.add_argument(f'user-agent={user_agent}')
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     options.add_argument("--disable-plugins")
     # Image disable
-    options.add_argument('blink-settings=imagesEnabled=false')
+    # options.add_argument('blink-settings=imagesEnabled=false')
 
     # Bug avoid
     # options.add_argument('--disable-gpu')
@@ -50,10 +50,12 @@ def crawlWatsons():
     jsonDict = []
     while not terminate:
         try:
-            element = WebDriverWait(driver, 60).until(
+            element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "productItemContainer")))
         except:
-            continue
+            print("Watsons no respond.")
+            error = True
+            break
         while len(driver.find_elements_by_link_text("顯示更多")) != 0:
             driver.execute_script("window.scrollBy(0,document.body.scrollHeight - 100)")
             time.sleep(1)
@@ -80,12 +82,13 @@ def crawlWatsons():
         terminate = True
         print("Crawling completed.")
 
-    with open(os.getcwd() + '/watsons.json', 'w', encoding="utf-8") as outfile:
-        json.dump(jsonDict, outfile, ensure_ascii=False)
+    if not error:
+        with open(os.getcwd() + '/watsons.json', 'w', encoding="utf-8") as outfile:
+            json.dump(jsonDict, outfile, ensure_ascii=False)
 
-    print(datetime.now() - start)
-    # Creating JSON file
-    upload_file(os.getcwd() + '/watsons.json', "mask-inventory/watsons.json")
+        print(datetime.now() - start)
+        # Creating JSON file
+        upload_file(os.getcwd() + '/watsons.json', "mask-inventory/watsons.json")
     driver.quit()
 
     return 0

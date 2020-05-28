@@ -88,3 +88,4 @@ def crawlHKTV():
     upload_file(os.getcwd() + '/HKTVMall.json', "mask-inventory/HKTVMall.json")
     driver.quit()
     return 0
+
