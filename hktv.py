@@ -87,7 +87,6 @@ def crawlHKTV():
 
             # Release memory allocation
             del productWrapper, product, price, btn, element, url
-            gc.collect()
         else:
             terminate = True
             print("Done.")
