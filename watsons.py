@@ -7,7 +7,7 @@ from S3Upload import upload_file
 import boto3
 from botocore.exceptions import ClientError
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains, TouchActions
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -54,7 +54,7 @@ def crawlWatsons():
         try:
             element = WebDriverWait(driver, 60).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "productItemContainer")))
-        except:
+        except TimeoutException:
             print("Watsons no respond.")
             error = True
             break

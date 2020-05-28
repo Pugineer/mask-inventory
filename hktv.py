@@ -2,6 +2,9 @@ import json
 import logging
 import os
 from datetime import datetime
+
+from selenium.common.exceptions import TimeoutException
+
 from S3Upload import upload_file
 
 import boto3 as boto3
@@ -57,7 +60,7 @@ def crawlHKTV():
         try:
             element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "brand-product-name")))
-        except:
+        except TimeoutException:
             print("HKTVMall no response")
             error = True
 
