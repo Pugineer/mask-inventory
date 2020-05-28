@@ -80,6 +80,9 @@ def crawlHKTV():
             driver.execute_script("window.scrollBy(0,100)")
             action.click().perform()
             print("Done.")
+
+            # Release memory allocation
+            del productWrapper, product, price, btn, element, url
         else:
             terminate = True
             print("Done.")
