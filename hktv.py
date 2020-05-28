@@ -32,9 +32,6 @@ def crawlHKTV():
     options.add_argument("--headless")
     options.add_argument("--disable-plugins")
     options.add_argument("--lang=zh-TW")
-    options.add_argument("-media-cache-size=1")
-    options.add_argument("-disk-cache-size=1")
-    options.add_argument("-incognito")
 
     # Image disable
     options.add_argument('blink-settings=imagesEnabled=false')
