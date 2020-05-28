@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import gc
 from datetime import datetime
 
 from selenium.common.exceptions import TimeoutException
@@ -86,6 +87,7 @@ def crawlHKTV():
 
             # Release memory allocation
             del productWrapper, product, price, btn, element, url
+            gc.collect()
         else:
             terminate = True
             print("Done.")
