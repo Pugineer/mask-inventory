@@ -28,10 +28,14 @@ def crawlHKTV():
     # print("Booting with: " + user_agent)
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
-    options.add_argument("--lang=zh-TW");
     options.add_argument(f'user-agent={user_agent}')
     options.add_argument("--headless")
     options.add_argument("--disable-plugins")
+    options.add_argument("--lang=zh-TW")
+    options.add_argument("-media-cache-size=1")
+    options.add_argument("-disk-cache-size=1")
+    options.add_argument("-incognito")
+
     # Image disable
     options.add_argument('blink-settings=imagesEnabled=false')
 
