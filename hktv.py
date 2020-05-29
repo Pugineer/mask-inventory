@@ -56,13 +56,11 @@ def crawlHKTV():
     # Crawling HKTVMall
     pageNumber = 0
     jsonDict = []
-    retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    jsonDict.append({retrieveTime: []})
     filterList = ["盒", "墊", "袋", "套", "夾", "液", "收納", "神器", "劑", "鏡", "寶", "機", "帽", "霧", "掛頸", "啫喱", "肌", "貼"]
     while not terminate:
         pageNumber += 1
         try:
-            element = WebDriverWait(driver, 30).until(
+            element = WebDriverWait(driver, 60).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "brand-product-name")))
         except TimeoutException:
             print("HKTVMall no response")
@@ -77,7 +75,9 @@ def crawlHKTV():
                 price = (productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute(
                     "data-price"))
                 url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
-                jsonDict.append({"Title": product, "Price": price, "URL": url})
+                store = productWrapper[p].find_element_by_class_name("store-name-label").find_element_by_css_selector("span").text
+                retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                jsonDict.append({"Title": product, "Store": store, "Price": price, "URL": url, "RetrieveTime": retrieveTime})
 
         btn = driver.find_element_by_id("paginationMenu_nextBtn")
         if not btn.get_attribute("class") == "disabled":
@@ -97,7 +97,7 @@ def crawlHKTV():
 
     if not error:
         with open(os.getcwd() + '/HKTVMall.json', 'w', encoding="utf-8") as outfile:
-            json.dump(jsonDict[retrieveTime], outfile, ensure_ascii=False)
+            json.dump(jsonDict, outfile, ensure_ascii=False)
 
         print(datetime.now() - start)
         # Creating JSON file
