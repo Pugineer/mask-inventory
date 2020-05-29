@@ -1,6 +1,6 @@
 
 $(document).ready(function () {
-    let defaultStore = "Watsons";
+    let defaultStore = "HKTVMall";
     let storeData = changeStore(defaultStore)
     $('#storeName').text(storeData[1]);
     $('#ajaxTable').dataTable({
