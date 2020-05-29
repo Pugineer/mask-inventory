@@ -52,7 +52,7 @@ def crawlWatsons():
     # Crawling watson
     jsonDict = []
     retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    jsonDict.append({"Retrieve time:": retrieveTime})
+    jsonDict.append({retrieveTime: []})
     while not terminate:
         try:
             element = WebDriverWait(driver, 60).until(
@@ -90,7 +90,7 @@ def crawlWatsons():
 
     if not error:
         with open(os.getcwd() + '/watsons.json', 'w', encoding="utf-8") as outfile:
-            json.dump(jsonDict, outfile, ensure_ascii=False)
+            json.dump(jsonDict[retrieveTime], outfile, ensure_ascii=False)
 
         print(datetime.now() - start)
         # Creating JSON file

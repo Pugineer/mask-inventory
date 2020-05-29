@@ -57,7 +57,7 @@ def crawlHKTV():
     pageNumber = 0
     jsonDict = []
     retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    jsonDict.append({"Retrieve time:": retrieveTime})
+    jsonDict.append({retrieveTime: []})
     filterList = ["盒", "墊", "袋", "套", "夾", "液", "收納", "神器", "劑", "鏡", "寶", "機", "帽", "霧", "掛頸", "啫喱", "肌", "貼"]
     while not terminate:
         pageNumber += 1
@@ -97,7 +97,7 @@ def crawlHKTV():
 
     if not error:
         with open(os.getcwd() + '/HKTVMall.json', 'w', encoding="utf-8") as outfile:
-            json.dump(jsonDict, outfile, ensure_ascii=False)
+            json.dump(jsonDict[retrieveTime], outfile, ensure_ascii=False)
 
         print(datetime.now() - start)
         # Creating JSON file
