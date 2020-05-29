@@ -77,7 +77,7 @@ def crawlHKTV():
                 url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
                 store = productWrapper[p].find_element_by_class_name("store-name-label").find_element_by_css_selector("span").text
                 retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                jsonDict.append({"Title": product, "Store": store, "Price": price, "URL": url, "RetrieveTime": retrieveTime})
+                jsonDict.append({"RetrieveTime": retrieveTime, "Store": store, "Title": product, "Price": price, "URL": url})
 
         btn = driver.find_element_by_id("paginationMenu_nextBtn")
         if not btn.get_attribute("class") == "disabled":

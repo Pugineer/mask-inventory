@@ -10,6 +10,8 @@ $(document).ready(function () {
             processData: false,
         },
         columns: [
+            {data: "RetrieveTime"},
+            {data: "Store"},
             {data: "Title"},
             {data: "Price"},
             {
