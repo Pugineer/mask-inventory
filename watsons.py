@@ -17,7 +17,6 @@ from fake_useragent import UserAgent
 import time
 
 def crawlWatsons():
-
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
     ua = UserAgent(verify_ssl=False)
@@ -52,6 +51,8 @@ def crawlWatsons():
     terminate = False
     # Crawling watson
     jsonDict = []
+    retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    jsonDict.append({"Retrieve time:": retrieveTime})
     while not terminate:
         try:
             element = WebDriverWait(driver, 60).until(
@@ -61,7 +62,7 @@ def crawlWatsons():
             error = True
             break
         while len(driver.find_elements_by_link_text("顯示更多")) != 0:
-            driver.execute_script("window.scrollBy(0,document.body.scrollHeight - 100)")
+            driver.execute_script("window.scrollBy(0,document.body.scrollHeight - 20)")
             time.sleep(1)
             btn = driver.find_element_by_link_text("顯示更多")
             actions = ActionChains(driver)

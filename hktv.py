@@ -56,6 +56,8 @@ def crawlHKTV():
     # Crawling HKTVMall
     pageNumber = 0
     jsonDict = []
+    retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    jsonDict.append({"Retrieve time:": retrieveTime})
     filterList = ["盒", "墊", "袋", "套", "夾", "液", "收納", "神器", "劑", "鏡", "寶", "機", "帽", "霧", "掛頸", "啫喱", "肌", "貼"]
     while not terminate:
         pageNumber += 1
