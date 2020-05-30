@@ -17,6 +17,7 @@ from fake_useragent import UserAgent
 import time
 
 def crawlWatsons():
+
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
     ua = UserAgent(verify_ssl=False)
@@ -42,25 +43,18 @@ def crawlWatsons():
         options.binary_location = ""
         driver = webdriver.Chrome(chrome_options=options)
         print("Exception")
+
     driver.maximize_window()
     driver.get("https://www.watsons.com.hk/search?text=%E5%8F%A3%E7%BD%A9")
 
     terminate = False
-    # Crawling watson
+    # Crawling amazon
     jsonDict = []
     while not terminate:
         element = WebDriverWait(driver, 60).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "productItemContainer")))
+            EC.presence_of_element_located((By.CLASS_NAME, "sg-col-inner")))
 
-        while len(driver.find_elements_by_link_text("顯示更多")) != 0:
-            driver.execute_script("window.scrollBy(0,document.body.scrollHeight - 100)")
-            time.sleep(1)
-            btn = driver.find_element_by_link_text("顯示更多")
-            actions = ActionChains(driver)
-            actions.click(btn).perform()
-            time.sleep(3)
-
-        productWrapper = driver.find_elements_by_class_name("productItemContainer")
+        productWrapper = driver.find_elements_by_class_name("sg-col-inner")
         print(len(productWrapper))
         for p in range(len(productWrapper)):
             disable = (len(productWrapper[p].find_elements_by_link_text("售罄")) != 0) or (
