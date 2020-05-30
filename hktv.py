@@ -29,11 +29,10 @@ def crawlHKTV():
     options.add_argument("--disable-plugins")
     options.add_argument("--lang=zh-TW")
     options.add_argument("--incognito")
-    options.add_argument("--verbose")
     # Image disable
     options.add_argument('blink-settings=imagesEnabled=false')
     # Bug avoid
-    options.add_argument('--disable-gpu')
+    # options.add_argument('--disable-gpu')
     # options.add_argument('--no-sandbox')
     # options.add_argument("--disable-dev-shm-usage")
 
