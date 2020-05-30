@@ -20,7 +20,7 @@ from fake_useragent import UserAgent
 from urllib3 import request
 
 
-def crawlHKTVMask():
+def crawlHKTV():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
     ua = UserAgent(verify_ssl=False)
