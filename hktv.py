@@ -23,8 +23,6 @@ import time
 def crawlHKTV():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-    ua = UserAgent(verify_ssl=False)
-    user_agent = ua.chrome
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
     # options.add_argument("--headless")
