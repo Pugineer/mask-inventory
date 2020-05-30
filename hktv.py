@@ -96,12 +96,12 @@ def crawlHKTVMask():
             print("Crawling completed.")
 
     if not error:
-        with open(os.getcwd() + '/HKTVMallMask.json', 'w', encoding="utf-8") as outfile:
+        with open(os.getcwd() + '/HKTVMall.json', 'w', encoding="utf-8") as outfile:
             json.dump(jsonDict, outfile, ensure_ascii=False)
 
         print(datetime.now() - start)
         # Creating JSON file
-        upload_file(os.getcwd() + '/HKTVMallMask.json', "mask-inventory/HKTVMallMask.json")
+        upload_file(os.getcwd() + '/HKTVMall.json', "mask-inventory/HKTVMall.json")
     driver.quit()
     return 0
 

@@ -47,12 +47,12 @@
     <table id="ajaxTable" class="display" style="width:100%">
         <h1 class="display-4" id="storeName" align="center">Test</h1>
         <thead>
-        <div class="btn btn-group-toggle" data-toggle="button">
+        <div class="btn-group btn-group-toggle mb-3" data-toggle="buttons">
             <label class="btn btn-outline-primary active">
-                <input type="checkbox" checked autocomplete="off"> Active
+                <input type="radio" name="options" id="option1" autocomplete="off" checked onclick="changeItemType('mask')"> 口罩
             </label>
             <label class="btn btn-outline-warning">
-                <input type="checkbox" autocomplete="off"> Check
+                <input type="radio" name="options" id="option2" autocomplete="off" onclick="changeItemType('pig')"> 豬嘴/護鏡
             </label>
         </div>
         <tr>

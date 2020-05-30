@@ -1,7 +1,7 @@
-
+let storeData = [];
 $(document).ready(function () {
     let defaultStore = "HKTVMall";
-    let storeData = changeStore(defaultStore)
+    storeData = changeStore(defaultStore)
     $('#storeName').text(storeData[1]);
     $('#ajaxTable').dataTable({
         ajax: {
@@ -32,26 +32,56 @@ $(document).ready(function () {
                 }
             }]
     });
+
+
 })
 
+function changeItemType(type){
+    if (type == "mask") {
+        switch (storeData[1]) {
+            case "HKTVMall":
+                storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/HKTVMall.json';
+                break;
+            case "Watsons":
+                storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/watsons.json';
+                break;
+            case "Amazon":
+                storeData[0] = 'json/amazon.json';
+                break;
+        }
+    }
+
+    if (type == "pig") {
+        switch (storeData[1]) {
+            case "HKTVMall":
+                storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/HKTVMallPig.json';
+                break;
+            case "Watsons":
+                storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/watsons.json';
+                break;
+            case "Amazon":
+                storeData[0] = 'json/amazon.json';
+                break;
+        }
+    }
+
+    $('#ajaxTable').DataTable().clear() //must need
+    $('#ajaxTable').DataTable().ajax.url(storeData[0]).load();//must need
+    $('#ajaxTable').DataTable().ajax.reload()//must need
+}
 function changeHandler(name) {
     let storeData = changeStore(name)
     $('#ajaxTable').DataTable().clear() //must need
     $('#ajaxTable').DataTable().ajax.url(storeData[0]).load();//must need
     $('#ajaxTable').DataTable().ajax.reload()//must need
     $('#storeName').text(storeData[1]);
+};
 
-}
 
 function changeStore(name){
-    let storeData = [];
     switch (name) {
         case "HKTVMall":
-            storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/HKTVMallMask.json';
-            storeData[1] = "HKTVMall";
-            break;
-        case "HKTVMallPig":
-            storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/HKTVMallPig.json';
+            storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/HKTVMall.json';
             storeData[1] = "HKTVMall";
             break;
         case "Watsons":
