@@ -7,13 +7,24 @@ $(document).ready(function () {
         ajax: {
             url: storeData[0],
             dataSrc: "",
-            processData: false,
         },
         columns: [
-            {data: "RetrieveTime"},
-            {data: "Store"},
-            {data: "Title"},
-            {data: "Price"},
+            {
+                data: "RetrieveTime",
+                defaultContent: ""
+            },
+            {
+                data: "Store",
+                defaultContent: ""
+            },
+            {
+                data: "Title",
+                defaultContent: ""
+            },
+            {
+                data: "Price",
+                defaultContent: ""
+            },
             {
                 data: "URL",
                 render: function (data, type, full, meta) {
@@ -36,7 +47,11 @@ function changeStore(name){
     let storeData = [];
     switch (name) {
         case "HKTVMall":
-            storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/HKTVMall.json';
+            storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/HKTVMallMask.json';
+            storeData[1] = "HKTVMall";
+            break;
+        case "HKTVMallPig":
+            storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/HKTVMallPig.json';
             storeData[1] = "HKTVMall";
             break;
         case "Watsons":

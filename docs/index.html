@@ -9,7 +9,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.684.0.min.js"></script>
     <script src="src/index.js"></script>
     <link rel="stylesheet" type="text/css" href="src/style.css">
@@ -18,14 +19,16 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand mx-auto" href="#"> 😷 Mask Inventory 😷</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">選擇店舖
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">選擇店舖
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item" href="#" onclick="changeHandler('All')">All</a>
@@ -41,29 +44,33 @@
 </nav>
 <div class="container" style="padding-top:20px">
 
-<table id="ajaxTable" class="display" style="width:100%">
-            <h1 class="display-4" id="storeName" align="center">Test</h1>
-
-    <thead>
-    <tr>
-        <th width="15%">最後更新時間</th>
-        <th width="10%">店鋪</th>
-        <th width="50%">貨品名稱</th>
-        <th width="10%">價格</th>
-        <th width="10%">連結</th>
-    </tr>
-    </thead>
-</table>
-    <p>註： 口罩套，袋，夾，盒等等配件並不包括在上表，如需購買，請到該網站自行選購。</p>
+    <table id="ajaxTable" class="display" style="width:100%">
+        <h1 class="display-4" id="storeName" align="center">Test</h1>
+        <thead>
+        <div class="btn btn-group-toggle" data-toggle="button">
+            <label class="btn btn-outline-primary active">
+                <input type="checkbox" checked autocomplete="off"> Active
+            </label>
+            <label class="btn btn-outline-warning">
+                <input type="checkbox" autocomplete="off"> Check
+            </label>
+        </div>
+        <tr>
+            <th width="15%">最後更新時間</th>
+            <th width="10%">店鋪</th>
+            <th width="50%">貨品名稱</th>
+            <th width="10%">價格</th>
+            <th width="10%">連結</th>
+        </tr>
+        </thead>
+    </table>
+    <p>註： 口罩套﹑袋﹑夾﹑盒等配件並不包括在上表，如需購買，請到該網站自行選購。</p>
     <hr>
     <div class="disclaimer font-weight-light d-flex flex-row">
         <p>本網站只用作學習和資訊用途，並無任何牟利成份。</p>
         <a href="https://github.com/Peachrara/mask-inventory" class="ml-auto">GitHub</a>
     </div>
 </div>
-
-
-
 
 
 </body>

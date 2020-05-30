@@ -1,12 +1,12 @@
 import datetime as datetime
 
 from watsons import crawlWatsons
-from hktv import crawlHKTV
+from hktv import crawlHKTVMask, crawlHKTVPig
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 
 def schedule():
-    crawlHKTV()
+    crawlHKTVPig()
 
 
 sched = BlockingScheduler()
