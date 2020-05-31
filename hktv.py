@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import gc
+import time
 from datetime import datetime
 
 from selenium.common.exceptions import TimeoutException
@@ -53,53 +54,97 @@ def crawlHKTV():
 
     driver.get("https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000")
 
-    terminate = False
     # Crawling HKTVMall
-    pageNumber = 0
-    jsonDict = []
-    urlList = []
+    init = True
     filterList = ["盒", "墊", "袋", "套", "夾", "液", "收納", "神器", "劑", "鏡", "寶", "機", "帽", "霧", "掛頸", "啫喱", "肌", "貼"]
-    while not terminate:
-        pageNumber += 1
-        try:
+    element = WebDriverWait(driver, 60).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, "brand-product-name")))
+    countryLabel = driver.find_element_by_xpath("//*[contains(text(), '顯示全部產地')]")
+    countryLabel.click()
+    element = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.CLASS_NAME, "overlay-item-btn-wrapper")))
+    checkboxWrapper = driver.find_element_by_class_name("ui-grid-view")
+    checkbox = checkboxWrapper.find_elements_by_class_name("list-label")
+
+    for data in range(len(checkbox)):
+        if not init:
             element = WebDriverWait(driver, 60).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "brand-product-name")))
-        except TimeoutException:
-            print("HKTVMall no response")
-            error = True
+                EC.presence_of_all_elements_located((By.CLASS_NAME, "brand-product-name")))
+            countryLabel = driver.find_element_by_xpath("//*[contains(text(), '顯示全部產地')]")
+            countryLabel.click()
+            element = WebDriverWait(driver, 60).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, "overlay-item-btn-wrapper")))
+            checkboxWrapper = driver.find_element_by_class_name("ui-grid-view")
+            checkbox = checkboxWrapper.find_elements_by_class_name("list-label")
 
-        print("Crawling on page " + str(pageNumber) + "...", end="   ")
-        productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
+        resetBtn = driver.find_element_by_xpath("//*[contains(text(), '重設')]")
+        submitBtn = driver.find_element_by_xpath("//*[contains(text(), '搜尋貨品')]")
+        driver.execute_script("arguments[0].click()", resetBtn)
+        time.sleep(1)
+        checkbox[data].click()
+        country = checkbox[data].text
+        print(country)
+        action = ActionChains(driver)
+        driver.execute_script("arguments[0].click()", submitBtn)
+        terminate = False
+        pageNumber = 0
+        print("Current country: " + country)
 
-        for p in range(len(productWrapper)):
-            product = productWrapper[p].find_element_by_class_name("brand-product-name").text
-            if not any(word in product for word in filterList):
-                price = (productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute(
-                    "data-price"))
-                url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
-                store = productWrapper[p].find_element_by_class_name("store-name-label").find_element_by_css_selector("span").text
-                retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                jsonDict.append({"RetrieveTime": retrieveTime, "Store": store, "Title": product, "Price": price, "URL": url})
+        while not terminate:
+            jsonDict = []
+            country = ""
+            pageNumber += 1
+            itemTotal = 0
+            print("Crawling on page " + str(pageNumber) + "...", end="   ")
+            element = WebDriverWait(driver, 60).until(
+                EC.presence_of_all_elements_located((By.CLASS_NAME, "brand-product-name")))
+            productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
 
+            for p in range(len(productWrapper)):
+                title = productWrapper[p].find_element_by_class_name("brand-product-name").text
+                if not any(word in title for word in filterList):
+                    price = (productWrapper[p].find_element_by_class_name("sepaButton").get_attribute(
+                        "data-price"))
+                    urlWrapper = productWrapper[p].find_elements_by_css_selector("a")
 
+                    # Retrieving Store
+                    store = productWrapper[p].find_element_by_class_name("store-name-label").find_element_by_css_selector(
+                        "span").text
 
-        btn = driver.find_element_by_id("paginationMenu_nextBtn")
+                    # Retrieving URL
+                    for item in range(len(urlWrapper)):
+                        if urlWrapper[item].get_property("rel") == "noopener" and urlWrapper[item].text == "":
+                            url = urlWrapper[item].get_attribute("href")
 
-        if not btn.get_attribute("class") == "disabled":
-            action = ActionChains(driver)
-            action.move_to_element(btn).perform()
-            driver.execute_script("window.scrollBy(0,100)")
-            action.click().perform()
-            driver.delete_all_cookies()
-            print("Done.")
+                    # Retrieving time
+                    retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                    jsonDict.append({"RetrieveTime": retrieveTime, "Store": store, "Title": title, "Country": country, "Price": price, "URL": url})
+                    print(jsonDict[itemTotal])
+                    itemTotal += 1
+                else:
+                    price = ""
+                    url = ""
+                    retrieveTime = ""
 
-            # Release memory allocation
-            del productWrapper, product, price, btn, element, url
-        else:
-            terminate = True
-            print("Done.")
-            print("Crawling completed.")
+            btn = driver.find_element_by_id("paginationMenu_nextBtn")
 
+            if not btn.get_attribute("class") == "disabled":
+                action = ActionChains(driver)
+                action.move_to_element(btn).perform()
+                driver.execute_script("window.scrollBy(0,100)")
+                action.click().perform()
+                driver.delete_all_cookies()
+                print("Done.")
+
+                with open(os.getcwd() + '/HKTVMall.json', 'w', encoding="utf-8") as outfile:
+                    json.dump(jsonDict, outfile, ensure_ascii=False, indent=2)
+                # Release memory allocation
+                del productWrapper, title, price, btn, element, url, jsonDict, retrieveTime, country
+            else:
+                terminate = True
+                print("Done.")
+                print("Crawling completed.")
+        init = False
     if not error:
         with open(os.getcwd() + '/HKTVMall.json', 'w', encoding="utf-8") as outfile:
             json.dump(jsonDict, outfile, ensure_ascii=False)
@@ -168,6 +213,9 @@ def crawlHKTVPig():
                 store = productWrapper[p].find_element_by_class_name("store-name-label").find_element_by_css_selector("span").text
                 retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                 jsonDict.append({"RetrieveTime": retrieveTime, "Store": store, "Title": product, "Price": price, "URL": url})
+            else:
+                price = ""
+                url = ""
 
         btn = driver.find_element_by_id("paginationMenu_nextBtn")
         if not btn.get_attribute("class") == "disabled":
@@ -179,7 +227,7 @@ def crawlHKTVPig():
             print("Done.")
 
             # Release memory allocation
-            del productWrapper, product, price, btn, element, url
+            del productWrapper, product, price, element, url
         else:
             terminate = True
             print("Done.")
