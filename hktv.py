@@ -133,7 +133,7 @@ def crawlHKTV():
             print(jsonDict[i])
             if i < itemTotal:
                 i += 1
-            time.sleep(2)
+            time.sleep(5)
 
 
 
