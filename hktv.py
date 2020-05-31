@@ -26,14 +26,14 @@ def crawlHKTV():
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     options.add_argument("--disable-plugins")
     options.add_argument("--lang=zh-TW")
     options.add_argument("--incognito")
     # Image disable
     options.add_argument('blink-settings=imagesEnabled=false')
     # Bug avoid
-    # options.add_argument('--disable-gpu')
+    options.add_argument('--disable-gpu')
     # options.add_argument('--no-sandbox')
     # options.add_argument("--disable-dev-shm-usage")
 
@@ -99,11 +99,13 @@ def crawlHKTV():
         i = 0
 
         for item in range(itemTotal):
-            element = WebDriverWait(driver, 60).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "brand-product-name")))
-
-            quickBtn = driver.find_elements_by_class_name("surface")
-            driver.execute_script("arguments[0].click();", quickBtn[item])
+            element = WebDriverWait(driver, 30).until(
+                EC.presence_of_all_elements_located((By.CLASS_NAME, "product-surface")))
+            quickWrapper = driver.find_elements_by_class_name("surface")
+            quickBtn = quickWrapper[item].find_element_by_class_name("spriteWrapper")
+            action = ActionChains(driver)
+            action.move_to_element(quickBtn).perform()
+            driver.execute_script("arguments[0].click();", quickBtn)
 
             element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "productPackingSpec")))
@@ -117,20 +119,23 @@ def crawlHKTV():
                     break
                 else:
                     country = ""
-            time.sleep(0.5)
+            element = WebDriverWait(driver, 30).until(
+                EC.presence_of_element_located((By.ID, "close-circle")))
             closeBtn = driver.find_element_by_id("cboxClose")
             print(closeBtn)
             driver.execute_script("arguments[0].click();", closeBtn)
 
             # Retrieving time
             retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            jsonDict[i].update({"Country": country, "RetrieveTime" : retrieveTime})
+            jsonDict[i].update({"Country": country, "RetrieveTime": retrieveTime})
             print("I value: " + str(i))
             # Append to string
             print(jsonDict[i])
-
             if i < itemTotal:
                 i += 1
+            time.sleep(2)
+
+
 
         btn = driver.find_element_by_id("paginationMenu_nextBtn")
         # Next page
