@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 import gc
 import time
@@ -8,17 +7,14 @@ from datetime import datetime
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 from S3Upload import upload_file
-
-import boto3 as boto3
-from botocore.exceptions import ClientError
 from selenium import webdriver
-from selenium.webdriver import ActionChains, TouchActions
+from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
-from urllib3 import request
+
 
 
 def initBrowser():
@@ -30,20 +26,22 @@ def initBrowser():
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
     options.add_argument(f'user-agent={user_agent}')
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     options.add_argument("--disable-plugins")
     options.add_argument("--lang=zh-TW")
     options.add_argument("--incognito")
-    options.add_argument('–-disk-cache-size= 1')
-    options.add_argument('--media-cache-size= 1')
-    options.add_argument('–disable-javascript')
+    options.add_argument('–-disk-cache-size=1')
+    options.add_argument('--media-cache-size=1')
+    options.add_argument('-–disable-javascript')
+    options.add_argument('--disable-java')
+    options.add_argument('--disable-extensions')
 
     # Image disable
     options.add_argument('blink-settings=imagesEnabled=false')
 
     # Bug avoid
-    # options.add_argument('--disable-gpu')
-    # options.add_argument('--no-sandbox')
+    options.add_argument('--disable-gpu')
+    #options.add_argument('--no-sandbox')
     options.add_argument("--disable-dev-shm-usage")
 
     try:
@@ -94,7 +92,7 @@ def crawlHKTV():
         checkbox[data].click()
         country = checkbox[data].text
         print(country)
-        action = ActionChains(driver)
+        time.sleep(1)
         driver.execute_script("arguments[0].click()", submitBtn)
         terminate = False
         pageNumber = 0
@@ -134,7 +132,6 @@ def crawlHKTV():
                     retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                     jsonDict.append({"RetrieveTime": retrieveTime, "Store": store, "Title": title, "Country": country,
                                      "Price": price, "URL": url})
-                    print(jsonDict[itemTotal])
                     itemTotal += 1
                 else:
                     price = ""
@@ -154,7 +151,7 @@ def crawlHKTV():
                     json.dump(jsonDict, outfile, ensure_ascii=False, indent=2)
 
                 # Release memory allocation
-                del productWrapper, title, price, btn, element, url, jsonDict, retrieveTime, action
+                del productWrapper, title, price, btn, element, url, jsonDict, retrieveTime, action, outfile
                 gc.collect()
                 driver.delete_all_cookies()
             else:
@@ -167,9 +164,6 @@ def crawlHKTV():
                 driver.get('https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000')
         init = False
     if not error:
-        with open(os.getcwd() + '/HKTVMall.json', 'w', encoding="utf-8") as outfile:
-            json.dump(jsonDict, outfile, ensure_ascii=False)
-
         print(datetime.now() - start)
         # Creating JSON file
         upload_file(os.getcwd() + '/HKTVMall.json', "mask-inventory/HKTVMall.json")
