@@ -5,7 +5,7 @@ import gc
 import time
 from datetime import datetime
 
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 from S3Upload import upload_file
 
@@ -19,6 +19,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 from urllib3 import request
+
+
 def initBrowser():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
     CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
@@ -28,7 +30,7 @@ def initBrowser():
     options = Options()
     options.binary_location = GOOGLE_CHROME_PATH
     options.add_argument(f'user-agent={user_agent}')
-    #options.add_argument("--headless")
+    options.add_argument("--headless")
     options.add_argument("--disable-plugins")
     options.add_argument("--lang=zh-TW")
     options.add_argument("--incognito")
@@ -51,12 +53,14 @@ def initBrowser():
         options.binary_location = ""
         driver = webdriver.Chrome(chrome_options=options)
         print("Exception")
+
+    driver.maximize_window()
     return driver
+
 
 def crawlHKTV():
     start = datetime.now()
     error = False
-    driverRestartTime = 0
     driver = initBrowser()
     driver.get("https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000")
 
@@ -107,13 +111,18 @@ def crawlHKTV():
 
             for p in range(len(productWrapper)):
                 title = productWrapper[p].find_element_by_class_name("brand-product-name").text
-                if not any(word in title for word in filterList):
+                try:
+                    outOfStock = productWrapper[p].find_element_by_class_name("out-of-stock-label")
+                except NoSuchElementException:
+                    outOfStock = False
+                if not any(word in title for word in filterList) and not outOfStock:
                     price = (productWrapper[p].find_element_by_class_name("sepaButton").get_attribute(
                         "data-price"))
                     urlWrapper = productWrapper[p].find_elements_by_css_selector("a")
 
                     # Retrieving Store
-                    store = productWrapper[p].find_element_by_class_name("store-name-label").find_element_by_css_selector(
+                    store = productWrapper[p].find_element_by_class_name(
+                        "store-name-label").find_element_by_css_selector(
                         "span").text
 
                     # Retrieving URL
@@ -123,7 +132,8 @@ def crawlHKTV():
 
                     # Retrieving time
                     retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                    jsonDict.append({"RetrieveTime": retrieveTime, "Store": store, "Title": title, "Country": country, "Price": price, "URL": url})
+                    jsonDict.append({"RetrieveTime": retrieveTime, "Store": store, "Title": title, "Country": country,
+                                     "Price": price, "URL": url})
                     print(jsonDict[itemTotal])
                     itemTotal += 1
                 else:
@@ -146,20 +156,15 @@ def crawlHKTV():
                 # Release memory allocation
                 del productWrapper, title, price, btn, element, url, jsonDict, retrieveTime, action
                 gc.collect()
-                currentURL = driver.current_url
                 driver.delete_all_cookies()
-
-                if driverRestartTime >= 5:
-                    driver.quit()
-                    del driver
-                    driver = initBrowser()
-                    driver.get(currentURL)
-                    driverRestartTime = 0
             else:
                 terminate = True
                 print("Done.")
                 print("Crawling completed.")
-            driverRestartTime += 1
+                driver.quit()
+                del driver
+                driver = initBrowser()
+                driver.get('https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000')
         init = False
     if not error:
         with open(os.getcwd() + '/HKTVMall.json', 'w', encoding="utf-8") as outfile:
@@ -170,6 +175,7 @@ def crawlHKTV():
         upload_file(os.getcwd() + '/HKTVMall.json', "mask-inventory/HKTVMall.json")
     driver.quit()
     return 0
+
 
 def crawlHKTVPig():
     GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
@@ -226,9 +232,11 @@ def crawlHKTVPig():
                 price = (productWrapper[p].find_element_by_class_name("sepaButton.add-to-cart-button").get_attribute(
                     "data-price"))
                 url = (productWrapper[p].find_elements_by_css_selector("a")[1].get_attribute("href"))
-                store = productWrapper[p].find_element_by_class_name("store-name-label").find_element_by_css_selector("span").text
+                store = productWrapper[p].find_element_by_class_name("store-name-label").find_element_by_css_selector(
+                    "span").text
                 retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                jsonDict.append({"RetrieveTime": retrieveTime, "Store": store, "Title": product, "Price": price, "URL": url})
+                jsonDict.append(
+                    {"RetrieveTime": retrieveTime, "Store": store, "Title": product, "Price": price, "URL": url})
             else:
                 price = ""
                 url = ""
@@ -258,4 +266,3 @@ def crawlHKTVPig():
         upload_file(os.getcwd() + '/HKTVMallPig.json', "mask-inventory/HKTVMallPig.json")
     driver.quit()
     return 0
-
