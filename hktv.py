@@ -40,7 +40,7 @@ def initBrowser():
     options.add_argument('blink-settings=imagesEnabled=false')
 
     # Bug avoid
-    options.add_argument('--disable-gpu')
+    #options.add_argument('--disable-gpu')
     #options.add_argument('--no-sandbox')
     options.add_argument("--disable-dev-shm-usage")
 
@@ -76,7 +76,7 @@ def crawlHKTV():
 
     for data in range(len(checkbox)):
         if not init:
-            element = WebDriverWait(driver, 60).until(
+            element = WebDriverWait(driver, 120).until(
                 EC.presence_of_all_elements_located((By.CLASS_NAME, "brand-product-name")))
             countryLabel = driver.find_element_by_xpath("//*[contains(text(), '顯示全部產地')]")
             countryLabel.click()
