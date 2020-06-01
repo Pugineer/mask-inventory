@@ -98,7 +98,6 @@ def crawlHKTV():
 
         while not terminate:
             jsonDict = []
-            country = ""
             pageNumber += 1
             itemTotal = 0
             print("Crawling on page " + str(pageNumber) + "...", end="   ")
