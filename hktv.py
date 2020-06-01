@@ -145,7 +145,7 @@ def crawlHKTV():
                     json.dump(jsonDict, outfile, ensure_ascii=False, indent=2)
 
                 # Release memory allocation
-                del productWrapper, title, price, btn, element, url, jsonDict, retrieveTime, country, action
+                del productWrapper, title, price, btn, element, url, jsonDict, retrieveTime, action
                 gc.collect()
                 currentURL = driver.current_url
                 driver.delete_all_cookies()
