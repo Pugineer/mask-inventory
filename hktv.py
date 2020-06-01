@@ -109,10 +109,7 @@ def crawlHKTV():
 
             for p in range(len(productWrapper)):
                 title = productWrapper[p].find_element_by_class_name("brand-product-name").text
-                try:
-                    outOfStock = productWrapper[p].find_element_by_class_name("out-of-stock-label")
-                except NoSuchElementException:
-                    outOfStock = False
+                outOfStock = len(productWrapper[p].find_elements_by_class_name("out-of-stock-label")) > 0
                 if not any(word in title for word in filterList) and not outOfStock:
                     price = (productWrapper[p].find_element_by_class_name("sepaButton").get_attribute(
                         "data-price"))
