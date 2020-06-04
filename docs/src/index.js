@@ -22,6 +22,10 @@ $(document).ready(function () {
                 defaultContent: ""
             },
             {
+                 data: "Country",
+                 defaultContent: ""
+            },
+            {
                 data: "Price",
                 defaultContent: ""
             },

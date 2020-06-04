@@ -15,36 +15,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 import time
+from driver import initBrowser
 
 def crawlWatsons():
-    GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
-    CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-    ua = UserAgent(verify_ssl=False)
-    user_agent = ua.chrome
-    # print("Booting with: " + user_agent)
-    options = Options()
-    options.binary_location = GOOGLE_CHROME_PATH
-    options.add_argument(f'user-agent={user_agent}')
-    # options.add_argument("--headless")
-    options.add_argument("--disable-plugins")
-    # Image disable
-    # options.add_argument('blink-settings=imagesEnabled=false')
-
-    # Bug avoid
-    # options.add_argument('--disable-gpu')
-    # options.add_argument('--no-sandbox')
-    # options.add_argument("--disable-dev-shm-usage")
     start = datetime.now()
-    try:
-        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
-        print("run")
-    except:
-        options.binary_location = ""
-        driver = webdriver.Chrome(chrome_options=options)
-        print("Exception")
-    driver.maximize_window()
+    error = False
+    driver = initBrowser()
     driver.get("https://www.watsons.com.hk/search?text=%E5%8F%A3%E7%BD%A9")
-
     terminate = False
     # Crawling watson
     jsonDict = []
