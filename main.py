@@ -6,6 +6,8 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 
 def schedule():
+    crawlWatsons()
+    crawlHKTV()
     crawlHKTVPig()
 
 sched = BlockingScheduler()
