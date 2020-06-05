@@ -1,10 +1,6 @@
-# djangogirls/.gitignore
-
 venv/
 *.pyc
 __pycache__
-staticfiles
-db.sqlite3
 .idea/
-crawl/maskInventory/templates/maskInventory/hktv.json
-crawl/maskInventory/templates/maskInventory/wastons.json
+json/
+AWS/

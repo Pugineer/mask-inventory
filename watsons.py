@@ -23,8 +23,9 @@ def crawlWatsons():
     driver = initBrowser()
     driver.get("https://www.watsons.com.hk/search?text=%E5%8F%A3%E7%BD%A9")
     terminate = False
-    # Crawling watson
     jsonDict = []
+
+    # Crawling watson
     while not terminate:
         element = WebDriverWait(driver, 60).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "productItemContainer")))
@@ -38,7 +39,6 @@ def crawlWatsons():
             time.sleep(3)
 
         productWrapper = driver.find_elements_by_class_name("productItemContainer")
-        print(len(productWrapper))
         for p in range(len(productWrapper)):
             disable = (len(productWrapper[p].find_elements_by_link_text("售罄")) != 0) or (
                     len(productWrapper[p].find_elements_by_link_text("Out of stock")) != 0)
@@ -49,19 +49,20 @@ def crawlWatsons():
                 print(price)
                 url = productWrapper[p].find_elements_by_css_selector("a")[0].get_attribute("href")
                 print(url)
-                jsonDict.append({"Title": product, "Price": price, "URL": url})
+                retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                jsonDict.append({"RetrieveTime": retrieveTime, "Title": product, "Price": price, "URL": url})
                 print("Done.")
 
         terminate = True
         print("Crawling completed.")
 
     if not error:
-        with open(os.getcwd() + '/watsons.json', 'w', encoding="utf-8") as outfile:
+        with open(os.getcwd() + '/json/watsons.json', 'w', encoding="utf-8") as outfile:
             json.dump(jsonDict, outfile, ensure_ascii=False)
 
         print(datetime.now() - start)
         # Creating JSON file
-        upload_file(os.getcwd() + '/watsons.json', "mask-inventory/watsons.json")
+        upload_file(os.getcwd() + '/json/watsons.json', "mask-inventory/watsons.json")
     driver.quit()
 
     return 0

@@ -6,10 +6,10 @@ from botocore.exceptions import ClientError
 
 
 def upload_file(file_name, object_name=None):
-    with open(os.getcwd() + '/accessKey.txt', 'r', encoding="utf-8") as outfile:
+    with open(os.getcwd() + '/AWS/accessKey.txt', 'r', encoding="utf-8") as outfile:
         accessKey = outfile.read()
 
-    with open(os.getcwd() + '/private.txt', 'r', encoding="utf-8") as outfile:
+    with open(os.getcwd() + '/AWS/private.txt', 'r', encoding="utf-8") as outfile:
         privateKey = outfile.read()
     # If S3 object_name was not specified, use file_name
     if object_name is None:
