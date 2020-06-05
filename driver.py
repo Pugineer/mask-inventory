@@ -1,7 +1,7 @@
 from fake_useragent import UserAgent
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
+import os
 
 def initBrowser():
     ua = UserAgent(verify_ssl=False)
@@ -28,4 +28,9 @@ def initBrowser():
     print("run")
 
     driver.maximize_window()
+
+    # Make json dir
+    path = os.getcwd() + "/json/"
+    if not os.path.isdir(path):
+        os.makedirs(path)
     return driver
