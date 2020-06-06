@@ -50,7 +50,7 @@ function changeItemType(type){
                 storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/watsons.json';
                 break;
             case "Amazon":
-                storeData[0] = 'json/amazon.json';
+                storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/amazon.json';
                 break;
         }
     }

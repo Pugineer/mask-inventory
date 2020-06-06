@@ -16,9 +16,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 from driver import initBrowser
 
+
 def crawlHKTV():
     start = datetime.now()
     jsonDict = []
+    prevURL = ""
     error = False
     driver = initBrowser()
     driver.get("https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000")
@@ -26,27 +28,28 @@ def crawlHKTV():
     # Crawling HKTVMall
     init = True
     filterList = ["盒", "墊", "袋", "套", "夾", "液", "收納", "神器", "劑", "鏡", "寶", "機", "帽", "霧", "掛頸", "啫喱", "肌", "貼"]
-    element = WebDriverWait(driver, 60).until(
+    element = WebDriverWait(driver, 120).until(
         EC.presence_of_all_elements_located((By.CLASS_NAME, "brand-product-name")))
     countryLabel = driver.find_element_by_xpath("//*[contains(text(), '顯示全部產地')]")
     countryLabel.click()
+    time.sleep(1)
     element = WebDriverWait(driver, 60).until(
-        EC.element_to_be_clickable((By.CLASS_NAME, "overlay-item-btn-wrapper")))
+        EC.presence_of_all_elements_located((By.TAG_NAME, "input")))
     checkboxWrapper = driver.find_element_by_class_name("ui-grid-view")
     checkbox = checkboxWrapper.find_elements_by_class_name("list-label")
-
-    for data in range(len(checkbox)):
+    print(len(checkbox))
+    data = 0
+    while data < len(checkbox):
         if not init:
             element = WebDriverWait(driver, 120).until(
                 EC.presence_of_all_elements_located((By.CLASS_NAME, "brand-product-name")))
             countryLabel = driver.find_element_by_xpath("//*[contains(text(), '顯示全部產地')]")
             countryLabel.click()
+            time.sleep(1)
             element = WebDriverWait(driver, 60).until(
-                EC.presence_of_all_elements_located((By.CLASS_NAME, "list-label")))
+                EC.presence_of_all_elements_located((By.TAG_NAME, "input")))
             checkboxWrapper = driver.find_element_by_class_name("ui-grid-view")
             checkbox = checkboxWrapper.find_elements_by_class_name("list-label")
-            checkboxInput = checkbox[data].find_element_by_tag_name("input")
-
 
         resetBtn = driver.find_element_by_xpath("//*[contains(text(), '重設')]")
         submitBtn = driver.find_element_by_xpath("//*[contains(text(), '搜尋貨品')]")
@@ -55,14 +58,6 @@ def crawlHKTV():
         checkboxInput = checkbox[data].find_element_by_tag_name("input")
         action = ActionChains(driver)
         action.move_to_element(checkboxInput).click().perform()
-        time.sleep(2)
-        checkBoxChecked = checkboxInput.is_selected()
-        print(checkBoxChecked)
-        while not checkBoxChecked:
-            print("click")
-            action = ActionChains(driver)
-            action.move_to_element(checkboxInput).click().perform()
-            checkBoxChecked = checkboxInput.is_selected()
         country = checkbox[data].text
         action = ActionChains(driver)
         action.move_to_element(submitBtn).click().perform()
@@ -73,6 +68,18 @@ def crawlHKTV():
         while not terminate:
             pageNumber += 1
             print("Crawling on page " + str(pageNumber) + "...", end="   ")
+
+            # Bug avoiding measure
+            if driver.current_url == prevURL:
+                print("Bug encountered, driver restarts. ")
+                driver.quit()
+                del driver
+                driver = initBrowser()
+                driver.get(
+                    "https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000")
+                data -= 1
+                break
+
             element = WebDriverWait(driver, 60).until(
                 EC.presence_of_all_elements_located((By.CLASS_NAME, "brand-product-name")))
             productWrapper = driver.find_elements_by_class_name("product-brief-wrapper")
@@ -105,7 +112,7 @@ def crawlHKTV():
                     retrieveTime = ""
 
             btn = driver.find_element_by_id("paginationMenu_nextBtn")
-
+            prevURL = driver.current_url
             if not btn.get_attribute("class") == "disabled":
                 action = ActionChains(driver)
                 action.move_to_element(btn).perform()
@@ -125,15 +132,17 @@ def crawlHKTV():
                 print("Crawling completed.")
                 driver.quit()
                 del driver
-                if not data >= len(checkbox)-1:
+                if not data >= len(checkbox) - 1:
                     driver = initBrowser()
-                    driver.get('https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000')
+                    driver.get(
+                        'https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000')
+
+        data += 1
         init = False
+
     if not error:
         print(datetime.now() - start)
-        # Creating JSON file
         upload_file(os.getcwd() + '/json/HKTVMall.json', "mask-inventory/HKTVMall.json")
-    driver.quit()
     return 0
 
 

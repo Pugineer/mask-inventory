@@ -3,6 +3,7 @@ import logging
 import os
 from datetime import datetime
 from S3Upload import upload_file
+from driver import initBrowser
 
 import boto3
 from botocore.exceptions import ClientError
@@ -16,69 +17,43 @@ from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 import time
 
-def crawlWatsons():
-
-    GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google-chrome'
-    CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-    ua = UserAgent(verify_ssl=False)
-    user_agent = ua.chrome
-    # print("Booting with: " + user_agent)
-    options = Options()
-    options.binary_location = GOOGLE_CHROME_PATH
-    options.add_argument(f'user-agent={user_agent}')
-    # options.add_argument("--headless")
-    options.add_argument("--disable-plugins")
-    # Image disable
-    # options.add_argument('blink-settings=imagesEnabled=false')
-
-    # Bug avoid
-    # options.add_argument('--disable-gpu')
-    # options.add_argument('--no-sandbox')
-    # options.add_argument("--disable-dev-shm-usage")
+def crawlAmazon():
     start = datetime.now()
-    try:
-        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
-        print("run")
-    except:
-        options.binary_location = ""
-        driver = webdriver.Chrome(chrome_options=options)
-        print("Exception")
-
-    driver.maximize_window()
-    driver.get("https://www.watsons.com.hk/search?text=%E5%8F%A3%E7%BD%A9")
-
-    terminate = False
-    # Crawling amazon
     jsonDict = []
+    error = False
+    priceNotFound = False
+    driver = initBrowser()
+    driver.get("https://www.amazon.com/s?k=mask&ref=nb_sb_noss")
+    terminate = False
     while not terminate:
-        element = WebDriverWait(driver, 60).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "sg-col-inner")))
+        element = WebDriverWait(driver, 120).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.a-section.a-spacing-medium")))
+        productWrapper = driver.find_elements_by_css_selector("div.a-section.a-spacing-medium")
+        for product in range(len(productWrapper) - 1):
+            print("Product " + str(product))
+            totalPrice = 0
+            if len(productWrapper[product].find_elements_by_css_selector("div.a-row.a-spacing-micro")) == 0:
+                title = productWrapper[product].find_element_by_css_selector("span.a-size-base-plus.a-color-base.a-text-normal").text
+                try:
+                    priceWhole = productWrapper[product].find_element_by_class_name("a-price-whole").text
+                    priceFraction = productWrapper[product].find_element_by_class_name("a-price-fraction").text
+                except NoSuchElementException:
+                    print("Item " + str(product) + ": Price not found.")
+                productURL = productWrapper[product].find_element_by_class_name("a-link-normal").get_attribute("href")
+                totalPrice = priceWhole + "." + priceFraction
+                retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                jsonDict.append({"RetrieveTime": retrieveTime, "Title": title, "Price": totalPrice, "URL": productURL})
+                print(title, totalPrice, productURL)
 
-        productWrapper = driver.find_elements_by_class_name("sg-col-inner")
-        print(len(productWrapper))
-        for p in range(len(productWrapper)):
-            disable = (len(productWrapper[p].find_elements_by_link_text("售罄")) != 0) or (
-                    len(productWrapper[p].find_elements_by_link_text("Out of stock")) != 0)
-            if not disable:
-                product = productWrapper[p].find_element_by_class_name("h1").text
-                print(product)
-                price = productWrapper[p].find_element_by_class_name("h2").text
-                print(price)
-                url = productWrapper[p].find_elements_by_css_selector("a")[0].get_attribute("href")
-                print(url)
-                jsonDict.append({"Title": product, "Price": price, "URL": url})
-                print("Done.")
-
-        terminate = True
-        print("Crawling completed.")
+        nextPageBtn = driver.find_element_by_class_name("a-last")
+        if len(driver.find_elements_by_css_selector("li.a-disabled.a-last")) == 0:
+            nextPageBtn.click()
+            with open(os.getcwd() + '/json/amazon.json', 'w', encoding="utf-8") as outfile:
+                json.dump(jsonDict, outfile, ensure_ascii=False, indent=2)
+        else:
+            terminate = True
 
     if not error:
-        with open(os.getcwd() + '/watsons.json', 'w', encoding="utf-8") as outfile:
-            json.dump(jsonDict, outfile, ensure_ascii=False)
-
         print(datetime.now() - start)
-        # Creating JSON file
-        upload_file(os.getcwd() + '/watsons.json', "mask-inventory/watsons.json")
-    driver.quit()
-
+        upload_file(os.getcwd() + '/json/amazon.json', "mask-inventory/amazon.json")
     return 0
