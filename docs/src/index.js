@@ -60,11 +60,8 @@ function changeItemType(type){
             case "HKTVMall":
                 storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/HKTVMallPig.json';
                 break;
-            case "Watsons":
-                storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/watsons.json';
-                break;
             case "Amazon":
-                storeData[0] = 'json/amazon.json';
+                storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/amazon.json';
                 break;
         }
     }
@@ -79,6 +76,7 @@ function changeHandler(name) {
     $('#ajaxTable').DataTable().ajax.url(storeData[0]).load();//must need
     $('#ajaxTable').DataTable().ajax.reload()//must need
     $('#storeName').text(storeData[1]);
+    $("#btnGroup").button('reset')
 };
 
 
@@ -93,7 +91,7 @@ function changeStore(name){
             storeData[1] = "Watsons";
             break;
         case "Amazon":
-            storeData[0] = 'json/amazon.json';
+            storeData[0] = 'https://peachrara.s3-ap-northeast-1.amazonaws.com/mask-inventory/amazon.json';
             storeData[1] = "Amazon";
             break;
     }
