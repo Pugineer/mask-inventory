@@ -3,7 +3,7 @@ import os
 import gc
 import time
 from datetime import datetime
-
+from multiprocessing import Process
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 from S3Upload import upload_file
@@ -96,6 +96,8 @@ def crawlHKTV():
                     store = productWrapper[p].find_element_by_class_name(
                         "store-name-label").find_element_by_css_selector(
                         "span").text
+
+                    # Retrieving reviews
 
                     # Retrieving URL
                     for item in range(len(urlWrapper)):
