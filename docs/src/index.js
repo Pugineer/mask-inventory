@@ -1,11 +1,16 @@
 let storeData = [];
+let table;
 $(document).ready(function () {
-    let defaultStore = "HKTVMall";
+    let defaultStore = "Amazon";
+    let countryShow;
     storeData = changeStore(defaultStore)
-    $('#storeName').text(storeData[1]);
-    $('#ajaxTable').dataTable({
+    let storeName = $('#storeName').text(storeData[1]);
+    let table = $('#ajaxTable').dataTable({
         dom: 'Pfrtip',
-
+        searchPanes:{
+            cascadePanes: true,
+            threshold: 0.9
+        },
         ajax: {
             url: storeData[0],
             dataSrc: "",
@@ -17,18 +22,22 @@ $(document).ready(function () {
                 searchPanes:{
                     show: false,
                 },
+
             },
             {
                 data: "Store",
-                defaultContent: ""
+                defaultContent: "",
             },
             {
                 data: "Title",
-                defaultContent: ""
+                defaultContent: "",
+                searchPanes:{
+                    show: false
+                },
             },
             {
                  data: "Country",
-                 defaultContent: ""
+                 defaultContent: "",
             },
             {
                 data: "Price",
@@ -39,10 +48,10 @@ $(document).ready(function () {
                 render: function (data, type, full, meta) {
                     return '<a class= "btn btn-outline-primary" href=' + data + ' role="button">Click me</a>';
                 }
-            }]
+            }],
+
+
     });
-
-
 })
 
 function changeItemType(type){
@@ -71,22 +80,22 @@ function changeItemType(type){
         }
     }
 
-    $('#ajaxTable').DataTable().clear() //must need
-    $('#ajaxTable').DataTable().ajax.url(storeData[0]).load();//must need
-    $('#ajaxTable').DataTable().ajax.reload()//must need
 }
 
 function changeHandler(name) {
+    table = $('#ajaxTable').DataTable();
     let storeData = changeStore(name)
-    if ($("#btn1").class == "active"){
+    let type;
+    if ($("#btn1").hasClass("active")){
         type = "mask"
     }
-    else{
+    else if ($("#btn2").hasClass("active")){
         type = "pig"
     }
     changeItemType(type)
     $('#storeName').text(storeData[1]);
-    $("#btnGroup").button('reset')
+    table.clear();
+    table.ajax.url(storeData[0]).load()
 };
 
 
