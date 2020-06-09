@@ -15,31 +15,12 @@ if __name__ == '__main__':
     manager = mp.Manager()
     q = manager.Queue()
     length = 0
-    processes = []
-    while length < 31:
-        p = mp.Process(target=crawlHKTV, args=(length, q))
-        processes.append(p)
-        length += 5
-        p.start()
-
-    for p in processes:
-        jsonDict += q.get()
-        p.join()
+    testData = [(0, q), (5, q), (10, q), (15,q), (20,q), (25,q), (30,q)]
+    pool = mp.Pool()
+    pool.starmap(crawlHKTV, testData)
+    pool.close()
+    pool.join()
 
     print(jsonDict)
     with open(os.getcwd() + '/json/HKTVMall.json', 'w', encoding="utf-8") as outfile:
         json.dump(jsonDict, outfile, ensure_ascii=False)
-
-    watsonProc = mp.Process(target=crawlWatsons)
-    watsonProc.start()
-    hktvPigProc = mp.Process(target=crawlHKTVPig)
-    hktvPigProc.start()
-    amazonProc = mp.Process(target=crawlAmazon())
-    amazonProc.start()
-    amazonPigProc = mp.Process(target=crawlAmazonPig)
-    amazonPigProc.start()
-    watsonProc.join()
-    hktvPigProc.join()
-    amazonProc.join()
-    amazonPigProc.join()
-
