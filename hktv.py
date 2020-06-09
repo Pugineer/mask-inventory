@@ -136,11 +136,8 @@ def crawlHKTV(data, q):
         processRunTime += 1
         init = False
 
-    print("Test")
-    q.put("123")
+    q.put(jsonDict)
     print(datetime.now() - start)
-
-    print("Process finished.")
 
 
 def crawlHKTVPig():
