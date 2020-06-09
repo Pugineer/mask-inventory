@@ -7,9 +7,10 @@ $(document).ready(function () {
     let storeName = $('#storeName').text(storeData[1]);
     let table = $('#ajaxTable').dataTable({
         dom: 'Pfrtip',
+        order: [[ 4, "asc" ]],
         searchPanes:{
             cascadePanes: true,
-            threshold: 0.9
+            threshold: 0.8
         },
         ajax: {
             url: storeData[0],

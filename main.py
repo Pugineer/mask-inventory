@@ -29,3 +29,10 @@ if __name__ == '__main__':
     print(jsonDict)
     with open(os.getcwd() + '/json/HKTVMall.json', 'w', encoding="utf-8") as outfile:
         json.dump(jsonDict, outfile, ensure_ascii=False)
+
+    watsonProc = mp.Process(target=crawlWatsons)
+    watsonProc.start()
+    hktvPigProc = mp.Process(target=crawlHKTVPig)
+    hktvPigProc.start()
+    watsonProc.join()
+    hktvPigProc.join()
