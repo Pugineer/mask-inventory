@@ -15,12 +15,17 @@ if __name__ == '__main__':
     manager = mp.Manager()
     q = manager.Queue()
     length = 0
+    processes = []
     while length < 31:
         p = mp.Process(target=crawlHKTV, args=(length, q))
+        processes.append(p)
+        length += 5
         p.start()
+
+    for p in processes:
         jsonDict += q.get()
         p.join()
-        length += 5
+
     print(jsonDict)
     with open(os.getcwd() + '/json/HKTVMall.json', 'w', encoding="utf-8") as outfile:
         json.dump(jsonDict, outfile, ensure_ascii=False)
