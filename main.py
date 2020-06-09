@@ -4,7 +4,7 @@ import os
 from multiprocessing import Process, Queue
 from watsons import crawlWatsons
 from hktv import crawlHKTV, crawlHKTVPig
-from amazon import crawlAmazon
+from amazon import crawlAmazon, crawlAmazonPig
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 import multiprocessing as mp
@@ -34,5 +34,12 @@ if __name__ == '__main__':
     watsonProc.start()
     hktvPigProc = mp.Process(target=crawlHKTVPig)
     hktvPigProc.start()
+    amazonProc = mp.Process(target=crawlAmazon())
+    amazonProc.start()
+    amazonPigProc = mp.Process(target=crawlAmazonPig)
+    amazonPigProc.start()
     watsonProc.join()
     hktvPigProc.join()
+    amazonProc.join()
+    amazonPigProc.join()
+
