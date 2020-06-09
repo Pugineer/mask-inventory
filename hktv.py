@@ -15,16 +15,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 from driver import initBrowser
+from multiprocessing import Queue
 
-
-def crawlHKTV():
+def crawlHKTV(data, q):
     start = datetime.now()
     jsonDict = []
     prevURL = ""
     error = False
     driver = initBrowser()
     driver.get("https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000")
-
+    totalItemCount = 0
     # Crawling HKTVMall
     init = True
     filterList = ["盒", "墊", "袋", "套", "夾", "液", "收納", "神器", "劑", "鏡", "寶", "機", "帽", "霧", "掛頸", "啫喱", "肌", "貼"]
@@ -38,8 +38,12 @@ def crawlHKTV():
     checkboxWrapper = driver.find_element_by_class_name("ui-grid-view")
     checkbox = checkboxWrapper.find_elements_by_class_name("list-label")
     print(len(checkbox))
-    data = 0
+    processRunTime = 0
     while data < len(checkbox):
+        errorTime = 0
+        if processRunTime >= 5:
+            print("over")
+            break
         if not init:
             element = WebDriverWait(driver, 120).until(
                 EC.presence_of_all_elements_located((By.CLASS_NAME, "brand-product-name")))
@@ -77,7 +81,6 @@ def crawlHKTV():
                 driver = initBrowser()
                 driver.get(
                     "https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000")
-                data -= 1
                 break
 
             element = WebDriverWait(driver, 60).until(
@@ -108,6 +111,7 @@ def crawlHKTV():
                     retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                     jsonDict.append({"RetrieveTime": retrieveTime, "Store": store, "Title": title, "Country": country,
                                      "Price": price, "URL": url})
+                    totalItemCount += 1
                 else:
                     price = ""
                     url = ""
@@ -120,32 +124,23 @@ def crawlHKTV():
                 action.move_to_element(btn).perform()
                 driver.execute_script("window.scrollBy(0,100)")
                 action.click().perform()
-                print("Done.")
-
-                with open(os.getcwd() + '/json/HKTVMall.json', 'w', encoding="utf-8") as outfile:
-                    json.dump(jsonDict, outfile, ensure_ascii=False, indent=2)
 
                 # Release memory allocation
-                del productWrapper, title, price, btn, element, url, retrieveTime, action, outfile
+                del productWrapper, title, price, btn, element, url, retrieveTime, action
                 driver.delete_all_cookies()
             else:
                 terminate = True
                 print("Done.")
                 print("Crawling completed.")
-                driver.quit()
-                del driver
-                if not data >= len(checkbox) - 1:
-                    driver = initBrowser()
-                    driver.get(
-                        'https://www.hktvmall.com/hktv/zh/search_a?keyword=%E5%8F%A3%E7%BD%A9&bannerCategory=AA32250000000')
-
         data += 1
+        processRunTime += 1
         init = False
 
-    if not error:
-        print(datetime.now() - start)
-        upload_file(os.getcwd() + '/json/HKTVMall.json', "mask-inventory/HKTVMall.json")
-    return 0
+    print("Test")
+    q.put("123")
+    print(datetime.now() - start)
+
+    print("Process finished.")
 
 
 def crawlHKTVPig():
