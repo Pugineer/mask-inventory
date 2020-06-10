@@ -1,7 +1,7 @@
 let storeData = [];
 let table;
 $(document).ready(function () {
-    let defaultStore = "Amazon";
+    let defaultStore = "HKTVMall";
     let countryShow;
     storeData = changeStore(defaultStore)
     let storeName = $('#storeName').text(storeData[1]);
@@ -9,7 +9,7 @@ $(document).ready(function () {
         dom: 'Pfrtip',
         searchPanes:{
             cascadePanes: true,
-            threshold: 0.9
+            threshold: 0.7
         },
         ajax: {
             url: storeData[0],
