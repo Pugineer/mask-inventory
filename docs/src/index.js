@@ -10,7 +10,7 @@ $(document).ready(function () {
         order: [[ 4, "asc" ]],
         searchPanes:{
             cascadePanes: true,
-            threshold: 0.8
+            threshold: 0.7
         },
         ajax: {
             url: storeData[0],

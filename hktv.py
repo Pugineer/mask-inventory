@@ -17,7 +17,7 @@ from fake_useragent import UserAgent
 from driver import initBrowser
 from multiprocessing import Queue
 
-def crawlHKTV(data, q):
+def crawlHKTV(data):
     start = datetime.now()
     jsonDict = []
     prevURL = ""
@@ -136,8 +136,8 @@ def crawlHKTV(data, q):
         processRunTime += 1
         init = False
 
-    q.put(jsonDict)
     print(datetime.now() - start)
+    return jsonDict
 
 
 def crawlHKTVPig():
