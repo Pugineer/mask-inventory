@@ -19,7 +19,7 @@ def initBrowser():
     options.add_argument('--disable-extensions')
 
     # Image disable
-    # options.add_argument('blink-settings=imagesEnabled=false')
+    options.add_argument('blink-settings=imagesEnabled=false')
 
     # Bug avoid
     options.add_argument('--disable-gpu')

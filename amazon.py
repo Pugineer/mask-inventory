@@ -40,7 +40,7 @@ def crawlAmazon():
                 except NoSuchElementException:
                     print("Item " + str(product) + ": Price not found.")
                 productURL = productWrapper[product].find_element_by_class_name("a-link-normal").get_attribute("href")
-                totalPrice = priceWhole + "." + priceFraction
+                totalPrice = priceWhole + "." + priceFraction + " USD"
                 retrieveTime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                 jsonDict.append({"RetrieveTime": retrieveTime, "Title": title, "Price": totalPrice, "URL": productURL})
                 print(title, totalPrice, productURL)

@@ -6,10 +6,12 @@ $(document).ready(function () {
     storeData = changeStore(defaultStore)
     let storeName = $('#storeName').text(storeData[1]);
     let table = $('#ajaxTable').dataTable({
+        order: [[ 4, "asc"]],
         dom: 'Pfrtip',
         searchPanes:{
             cascadePanes: true,
             threshold: 0.7
+
         },
         ajax: {
             url: storeData[0],
