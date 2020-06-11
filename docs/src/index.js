@@ -10,7 +10,7 @@ $(document).ready(function () {
         dom: 'Pfrtip',
         searchPanes:{
             cascadePanes: true,
-            threshold: 0.7
+            threshold: 0.85
 
         },
         ajax: {
