@@ -49,7 +49,10 @@ $(document).ready(function () {
                 data: "URL",
                 render: function (data, type, full, meta) {
                     return '<a class= "btn btn-outline-primary" href=' + data + ' role="button">Click me</a>';
-                }
+                },
+                searchPanes:{
+                    show: false
+                },
             }],
 
 
