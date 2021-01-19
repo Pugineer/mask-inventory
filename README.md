@@ -14,6 +14,8 @@ Python is used as the main language of this project.
   + The core of the script, it creates a Chrome instance to simulate a user browsing the website, and scraps the data.
  
 ### Screenshot
-![](https://imgur.com/a/41Hx8hr)
-![](https://imgur.com/a/ZTY0M9N)
+![](https://i.imgur.com/YuIMDih.png)
+> Without filtering
 
+![](https://i.imgur.com/Y7nMfg2.png)
+> With filtering
