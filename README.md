@@ -1,5 +1,7 @@
 # mask-inventory
 
+https://peachrara.github.io/mask-inventory/
+
 ### Introduction
 Mask-inventory is a website provide useful mask selling source to the public.
 All resources are automatically web-scraped and collected by a script, built by Selenium.
